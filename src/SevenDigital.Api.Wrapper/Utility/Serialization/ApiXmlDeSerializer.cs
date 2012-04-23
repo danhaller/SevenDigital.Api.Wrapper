@@ -17,7 +17,7 @@ namespace SevenDigital.Api.Wrapper.Utility.Serialization
 		{
 			var responseNode = _xmlErrorHandler.GetResponseAsXml(response);
 			_xmlErrorHandler.AssertError(responseNode);
-			var resourceNode = responseNode.FirstNode.ToString();
+			string resourceNode = responseNode.FirstNode != null ? responseNode.FirstNode.ToString() : responseNode.ToString();
 			
 			try
 			{

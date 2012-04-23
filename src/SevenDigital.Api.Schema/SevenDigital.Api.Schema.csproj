@@ -49,6 +49,7 @@
     <Compile Include="Chart\ReleaseChartItem.cs" />
     <Compile Include="Chart\TrackChartItem.cs" />
     <Compile Include="ITypeGenerator.cs" />
+    <Compile Include="OAuth\Authorise.cs" />
     <Compile Include="ParameterDefinitions\Get\HasArtistIdParameter.cs" />
     <Compile Include="ParameterDefinitions\Get\HasBasketParameter.cs" />
     <Compile Include="ParameterDefinitions\Get\HasChartParameter.cs" />
