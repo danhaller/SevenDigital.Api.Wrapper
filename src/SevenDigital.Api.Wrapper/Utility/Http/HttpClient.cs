@@ -21,6 +21,7 @@ namespace SevenDigital.Api.Wrapper.Utility.Http
 			WebResponse webResponse;
 			try
 			{
+				System.Diagnostics.Debug.WriteLine("SD.Api.Wrapper request Uri: " + request.Url);
 				webResponse = webRequest.GetResponse();
 			}
 			catch (WebException ex)

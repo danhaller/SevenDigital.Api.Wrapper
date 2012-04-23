@@ -95,7 +95,9 @@ namespace SevenDigital.Api.Wrapper
 		{
 			try
 			{
+				System.Diagnostics.Debug.WriteLine("SD.Api.Wrapper request Uri: " + _endPointInfo.Uri);
 				var output = _requestCoordinator.HitEndpoint(_endPointInfo);
+				System.Diagnostics.Debug.WriteLine("SD.Api.Wrapper request response: " + output);
 				return _deserializer.DeSerialize(output);
 			}
 			catch (ApiXmlException apiXmlException)
