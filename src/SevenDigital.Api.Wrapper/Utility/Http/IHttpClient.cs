@@ -1,13 +1,11 @@
-﻿using System;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SevenDigital.Api.Wrapper.Utility.Http
 {
-	public interface IHttpClient
+    public interface IHttpClient
 	{
-		IResponse Get(IRequest request);
-		void GetAsync(IRequest request, Action<IResponse> callback);
-
-		IResponse Post(IRequest request);
-		void PostAsync(IRequest request, Action<IResponse> callback);
+        Task<HttpResponseMessage> GetAsync(IRequest request);
+        Task<HttpResponseMessage> PostAsync(IRequest request);
 	}
 }

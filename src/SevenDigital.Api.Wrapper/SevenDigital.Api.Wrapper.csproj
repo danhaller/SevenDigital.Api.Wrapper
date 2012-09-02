@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
@@ -85,9 +86,7 @@
     <Compile Include="Utility\Http\HttpClient.cs" />
     <Compile Include="Utility\Http\IHttpClient.cs" />
     <Compile Include="Utility\Http\IRequest.cs" />
-    <Compile Include="Utility\Http\IResponse.cs" />
     <Compile Include="Utility\Http\Request.cs" />
-    <Compile Include="Utility\Http\Response.cs" />
     <Compile Include="Utility\Serialization\ResponseDeserializer.cs" />
     <Compile Include="Utility\Serialization\IResponseDeserializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
