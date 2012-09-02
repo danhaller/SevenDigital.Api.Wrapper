@@ -5,7 +5,10 @@ using SevenDigital.Api.Wrapper.Utility.Http;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution
 {
-	public class RequestCoordinator : IRequestCoordinator
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
+    public class RequestCoordinator : IRequestCoordinator
 	{
 		private readonly IUrlSigner _urlSigner;
 		private readonly IOAuthCredentials _oAuthCredentials;
@@ -39,20 +42,11 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution
 			}
 		}
 
-
-		public virtual IResponse HitEndpoint(EndPointInfo endPointInfo)
+		public virtual Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
 		{
 			var builder = ConstructBuilder(endPointInfo);
 			builder.HttpClient = HttpClient;
-			return builder.HitEndpoint(endPointInfo);
-		}
-
-
-		public virtual void HitEndpointAsync(EndPointInfo endPointInfo, Action<IResponse> callback)
-		{
-			var builder = ConstructBuilder(endPointInfo);
-			builder.HttpClient = HttpClient;
-			builder.HitEndpointAsync(endPointInfo, callback);
+			return builder.HitEndpointAsync(endPointInfo);
 		}
 	}
 }

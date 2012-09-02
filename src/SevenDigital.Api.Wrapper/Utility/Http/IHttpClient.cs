@@ -5,7 +5,7 @@ namespace SevenDigital.Api.Wrapper.Utility.Http
 {
     public interface IHttpClient
 	{
-        Task<HttpResponseMessage> GetAsync(IRequest request);
-        Task<HttpResponseMessage> PostAsync(IRequest request);
+        Task<HttpResponseMessage> GetAsync(GetRequest request);
+        Task<HttpResponseMessage> PostAsync(PostRequest request);
 	}
 }

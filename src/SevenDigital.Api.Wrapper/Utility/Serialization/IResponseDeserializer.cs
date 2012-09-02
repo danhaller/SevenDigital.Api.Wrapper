@@ -1,9 +1,10 @@
-﻿using SevenDigital.Api.Wrapper.Utility.Http;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SevenDigital.Api.Wrapper.Utility.Serialization
 {
-	public interface IResponseDeserializer<out T>
+    public interface IResponseDeserializer<T>
 	{
-		T Deserialize(IResponse response);
+        Task<T> Deserialize(HttpResponseMessage response);
 	}
 }

@@ -3,44 +3,47 @@ using System.Net;
 using System.Xml.Linq;
 using SevenDigital.Api.Schema;
 using SevenDigital.Api.Wrapper.Exceptions;
-using SevenDigital.Api.Wrapper.Utility.Http;
 
 namespace SevenDigital.Api.Wrapper.Utility.Serialization
 {
-	public class ResponseDeserializer<T> : IResponseDeserializer<T> where T : class
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
+    public class ResponseDeserializer<T> : IResponseDeserializer<T> where T : class
 	{
 		private const int DefaultErrorCode = 9001;
 
-		public T Deserialize(IResponse response)
-		{
-			CheckResponse(response);
-			return ParsedResponse(response);
+        public async Task<T> Deserialize(HttpResponseMessage response)
+        {
+            var bodyString = await response.Content.ReadAsStringAsync();
+            CheckResponse(response, bodyString);
+            return ParsedResponse(response, bodyString);
 		}
 
-		private void CheckResponse(IResponse response)
+        private void CheckResponse(HttpResponseMessage response, string responseBody)
 		{
 			if (response == null)
 			{
 				throw new ApiXmlException("No response");
 			}
 
-			if (string.IsNullOrEmpty(response.Body))
+            if (string.IsNullOrEmpty(responseBody))
 			{
 				throw new ApiXmlException("No response body", response.StatusCode);
 			}
 
-			var startOfMessage = StartOfMessage(response.Body);
+            var startOfMessage = StartOfMessage(responseBody);
 			var messageIsXml = IsXml(startOfMessage);
 
 			if (messageIsXml && IsApiErrorResponse(startOfMessage))
 			{
-				var error = ParseError(response.Body);
-				throw new ApiXmlException("Error response:\n" + response.Body, response.StatusCode, error);
+                var error = ParseError(responseBody);
+                throw new ApiXmlException("Error response:\n" + responseBody, response.StatusCode, error);
 			}
 
 			if (IsServerError((int)response.StatusCode))
 			{
-				throw new ApiXmlException("Server error:\n" + response.Body, response.StatusCode);
+                throw new ApiXmlException("Server error:\n" + responseBody, response.StatusCode);
 			}
 
 			if (!messageIsXml && response.StatusCode != HttpStatusCode.OK)
@@ -48,14 +51,14 @@ namespace SevenDigital.Api.Wrapper.Utility.Serialization
 				var error = new Error
 					{
 						Code = DefaultErrorCode,
-						ErrorMessage = response.Body
+                        ErrorMessage = responseBody
 					};
-				throw new ApiXmlException("Error response:\n" + response.Body, response.StatusCode, error);
+                throw new ApiXmlException("Error response:\n" + responseBody, response.StatusCode, error);
 			}
 
 			if (messageIsXml && !IsApiOkResponse(startOfMessage))
 			{
-				throw new ApiXmlException("No valid status found in response. Status must be one of 'ok' or 'error':\n" + response.Body, response.StatusCode);
+				throw new ApiXmlException("No valid status found in response. Status must be one of 'ok' or 'error':\n" + responseBody, response.StatusCode);
 			}
 		}
 
@@ -118,16 +121,16 @@ namespace SevenDigital.Api.Wrapper.Utility.Serialization
 			return int.Parse(attribute.Value);
 		}
 
-		private static T ParsedResponse(IResponse response)
+        private static T ParsedResponse(HttpResponseMessage response, string responseBody)
 		{
 			try
 			{
 				var deserializer = new StringDeserializer<T>();
-				return deserializer.Deserialize(response.Body);
+                return deserializer.Deserialize(responseBody);
 			}
 			catch (Exception ex)
 			{
-				string message = string.Format("Error trying to deserialize xml response\n{0}", response.Body);
+                string message = string.Format("Error trying to deserialize xml response\n{0}", responseBody);
 				throw new ApiXmlException(message, response.StatusCode, ex);
 			}
 		}

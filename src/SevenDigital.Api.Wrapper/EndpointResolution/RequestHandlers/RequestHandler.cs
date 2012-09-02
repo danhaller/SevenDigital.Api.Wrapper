@@ -6,10 +6,13 @@ using SevenDigital.Api.Wrapper.Utility.Http;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 {
-	public abstract class RequestHandler
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
+    public abstract class RequestHandler
 	{
-		public abstract IResponse HitEndpoint(EndPointInfo endPointInfo);
-		public abstract void HitEndpointAsync(EndPointInfo endPointInfo, Action<IResponse> action);
+        public abstract Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo);
+
 		protected abstract string AdditionalParameters(Dictionary<string, string> newDictionary);
 
 		private readonly IApiUri _apiUri;

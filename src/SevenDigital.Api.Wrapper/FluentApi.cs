@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SevenDigital.Api.Schema.OAuth;
 using SevenDigital.Api.Wrapper.EndpointResolution;
 using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 using SevenDigital.Api.Schema.Attributes;
-using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Wrapper.Utility.Http;
 using SevenDigital.Api.Wrapper.Utility.Serialization;
 
 namespace SevenDigital.Api.Wrapper
 {
-	public class FluentApi<T> : IFluentApi<T> where T : class
+    public class FluentApi<T> : IFluentApi<T> where T : class
 	{
 		private readonly EndPointInfo _endPointInfo = new EndPointInfo();
 		private readonly IRequestCoordinator _requestCoordinator;
@@ -107,37 +107,15 @@ namespace SevenDigital.Api.Wrapper
 			return this;
 		}
 
-		public virtual T Please()
-		{
-			try
-			{
-				var response = _requestCoordinator.HitEndpoint(_endPointInfo);
-				return _deserializer.Deserialize(response);
-			}
-			catch (ApiXmlException apiXmlException)
-			{
-				apiXmlException.Uri = EndpointUrl;
-				throw;
-			}
-		}
-
 		public virtual string EndpointUrl
 		{
 			get { return _requestCoordinator.ConstructEndpoint(_endPointInfo); }
 		}
 
-		public virtual void PleaseAsync(Action<T> callback)
+		public virtual async Task<T> PleaseAsync()
 		{
-			_requestCoordinator.HitEndpointAsync(_endPointInfo, PleaseAsyncEnd(callback));
-		}
-
-		internal Action<IResponse> PleaseAsyncEnd(Action<T> callback)
-		{
-			return output =>
-			{
-				T entity = _deserializer.Deserialize(output);
-				callback(entity);
-			};
+		   var response = await	_requestCoordinator.HitEndpointAsync(_endPointInfo);
+           return await _deserializer.Deserialize(response);
 		}
 
 		public IDictionary<string, string> Parameters { get { return _endPointInfo.Parameters; } }

@@ -1,11 +1,13 @@
-using System;
 using System.Collections.Generic;
-using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
+using System.Net.Http;
+using System.Threading.Tasks;
 using SevenDigital.Api.Wrapper.Utility.Http;
+using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 {
-	public class GetRequestHandler : RequestHandler
+
+    public class GetRequestHandler : RequestHandler
 	{
 		private readonly IOAuthCredentials _oAuthCredentials;
 		private readonly IUrlSigner _urlSigner;
@@ -16,25 +18,18 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 			_urlSigner = urlSigner;
 		}
 
-		public override IResponse HitEndpoint(EndPointInfo endPointInfo)
+        public override Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
 		{
-			var getRequest = BuildGetRequest(endPointInfo);
-			return HttpClient.Get(getRequest);
+            GetRequest request = BuildGetRequest(endPointInfo);
+            return HttpClient.GetAsync(request);
 		}
 
-		private Request BuildGetRequest(EndPointInfo endPointInfo)
-		{
-			var uri = ConstructEndpoint(endPointInfo);
-			var signedUrl = SignHttpGetUrl(uri, endPointInfo);
-			var getRequest = new Request(signedUrl, endPointInfo.Headers);
-			return getRequest;
-		}
-
-		public override void HitEndpointAsync(EndPointInfo endPointInfo, Action<IResponse> action)
-		{
-			var getRequest = BuildGetRequest(endPointInfo);
-			HttpClient.GetAsync(getRequest, response => action(response));
-		}
+        private GetRequest BuildGetRequest(EndPointInfo endPointInfo)
+        {
+            var uri = ConstructEndpoint(endPointInfo);
+            var signedUrl = SignHttpGetUrl(uri, endPointInfo);
+            return new GetRequest(signedUrl, endPointInfo.Headers);
+        }
 
 		private string SignHttpGetUrl(string uri, EndPointInfo endPointInfo)
 		{
@@ -44,7 +39,6 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 			}
 			return uri;
 		}
-
 
 		protected override string AdditionalParameters(Dictionary<string, string> newDictionary)
 		{

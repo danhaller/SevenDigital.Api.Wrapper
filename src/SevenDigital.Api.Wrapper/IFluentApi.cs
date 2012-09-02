@@ -3,7 +3,9 @@ using SevenDigital.Api.Wrapper.Utility.Http;
 
 namespace SevenDigital.Api.Wrapper
 {
-	// [AD] DO NOT PUT THE OUR BACK IN, NOT SUPPORTED IN WINDOWS PHONE
+    using System.Threading.Tasks;
+
+    // [AD] DO NOT PUT THE OUR BACK IN, NOT SUPPORTED IN WINDOWS PHONE
 	// ReSharper disable TypeParameterCanBeVariant
 	public interface IFluentApi<T>
 	// ReSharper restore TypeParameterCanBeVariant
@@ -15,7 +17,6 @@ namespace SevenDigital.Api.Wrapper
 		IFluentApi<T> UsingClient(IHttpClient httpClient);
 		string EndpointUrl { get; }
 
-		T Please();
-		void PleaseAsync(Action<T> callback);
+		Task<T> PleaseAsync();
 	}
 }

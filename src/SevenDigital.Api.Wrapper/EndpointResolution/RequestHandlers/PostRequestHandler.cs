@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
-using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
+using System.Net.Http;
+using System.Threading.Tasks;
 using SevenDigital.Api.Wrapper.Utility.Http;
+using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 {
-	public class PostRequestHandler : RequestHandler
+    public class PostRequestHandler : RequestHandler
 	{
 		private readonly IOAuthCredentials _oAuthCredentials;
 		private readonly IUrlSigner _urlSigner;
@@ -16,26 +18,21 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 			_urlSigner = urlSigner;
 		}
 
-		public override IResponse HitEndpoint(EndPointInfo endPointInfo)
+        public override Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
 		{
-			var postRequest = BuildPostRequest(endPointInfo);
-			return HttpClient.Post(postRequest);
-		}
-		public override void HitEndpointAsync(EndPointInfo endPointInfo, Action<IResponse> action)
-		{
-			var postRequest = BuildPostRequest(endPointInfo);
-			HttpClient.PostAsync(postRequest,response => action(response));
+            var request = BuildPostRequest(endPointInfo); 
+            return HttpClient.PostAsync(request);
 		}
 
-		private Request BuildPostRequest(EndPointInfo endPointInfo)
-		{
-			var uri = ConstructEndpoint(endPointInfo);
-			var signedParams = SignHttpPostParams(uri, endPointInfo);
-			var postRequest = new Request(uri, endPointInfo.Headers, signedParams);
-			return postRequest;
-		}
+        private PostRequest BuildPostRequest(EndPointInfo endPointInfo)
+        {
+            var uri = ConstructEndpoint(endPointInfo);
+            var signedParams = SignHttpPostParams(uri, endPointInfo);
 
-		private IDictionary<string, string> SignHttpPostParams(string uri, EndPointInfo endPointInfo)
+            return new PostRequest(uri, endPointInfo.Headers, signedParams);
+        }
+
+        private IDictionary<string, string> SignHttpPostParams(string uri, EndPointInfo endPointInfo)
 		{
 			if (endPointInfo.IsSigned)
 			{
