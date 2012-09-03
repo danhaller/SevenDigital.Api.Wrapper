@@ -11,6 +11,11 @@ using SevenDigital.Api.Wrapper.Utility.Serialization;
 
 namespace SevenDigital.Api.Wrapper
 {
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+
+    using HttpClient = SevenDigital.Api.Wrapper.Utility.Http.HttpClient;
+
     public class FluentApi<T> : IFluentApi<T> where T : class
 	{
 		private readonly EndPointInfo _endPointInfo = new EndPointInfo();
@@ -114,10 +119,24 @@ namespace SevenDigital.Api.Wrapper
 
 		public virtual async Task<T> PleaseAsync()
 		{
-		   var response = await	_requestCoordinator.HitEndpointAsync(_endPointInfo);
-           return await _deserializer.Deserialize(response);
+		   var httpResponse = await	_requestCoordinator.HitEndpointAsync(_endPointInfo);
+           var response = await MakeResponse(httpResponse);
+		    return _deserializer.Deserialize(response);
 		}
 
-		public IDictionary<string, string> Parameters { get { return _endPointInfo.Parameters; } }
+        private async Task<Response> MakeResponse(HttpResponseMessage httpResponse)
+        {
+            string responseBody = await httpResponse.Content.ReadAsStringAsync();
+            var headers = HttpHelpers.MapHeaders(httpResponse.Headers);
+            Response response = new Response(httpResponse.StatusCode, headers, responseBody);
+            return response;
+        }
+
+        private IDictionary<string, string> ParseHeaders(HttpResponseHeaders headers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<string, string> Parameters { get { return _endPointInfo.Parameters; } }
 	}
 }
