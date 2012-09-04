@@ -18,7 +18,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 			Basket basketCreate = Api<Basket>.Create
 				.Create()
 				.WithParameter("country", "GB")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(basketCreate, Is.Not.Null);
 			Assert.That(basketCreate.Id, Is.Not.Empty);
@@ -30,7 +30,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		{
 			Basket basket = Api<Basket>.Create
 				.WithParameter("basketId", _basketId)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);
 			Assert.That(basket.Id, Is.EqualTo(_basketId));
@@ -41,7 +41,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		{
 			Basket basket = Api<Basket>.Create
 				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);
 			Assert.That(basket.Id, Is.EqualTo(_basketId));
@@ -51,7 +51,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 			int toRemove = basket.BasketItems.Items.FirstOrDefault().Id;
 			basket = Api<Basket>.Create
 				.RemoveItem(new Guid(_basketId), toRemove) 
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);
 			Assert.That(basket.Id, Is.EqualTo(_basketId));
@@ -63,7 +63,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		{
 			Basket basket = Api<Basket>.Create
 								.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID, EXPECTED_TRACK_ID)
-								.Please();
+								.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);Assert.That(basket.Id, Is.EqualTo(_basketId));
 			Assert.That(basket.BasketItems.Items.Count, Is.GreaterThan(0));
@@ -72,7 +72,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 			int toRemove = basket.BasketItems.Items.FirstOrDefault().Id;
 			basket = new FluentApi<Basket>()
 				.RemoveItem(new Guid(_basketId), toRemove) 
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);
 			Assert.That(basket.Id, Is.EqualTo(_basketId));
@@ -84,7 +84,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		{
 			Basket basket = Api<Basket>.Create
 				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(basket.BasketItems.Items.First().AmountDue.Amount, Is.EqualTo("7.99"));
 			Assert.That(basket.BasketItems.Items.First().AmountDue.FormattedAmount, Is.EqualTo("£7.99"));

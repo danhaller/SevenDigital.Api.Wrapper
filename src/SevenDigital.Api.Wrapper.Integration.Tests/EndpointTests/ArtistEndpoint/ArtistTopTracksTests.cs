@@ -14,7 +14,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 			ArtistTopTracks artist = new FluentApi<ArtistTopTracks>()
 				.WithParameter("artistId", "1")
 				.WithParameter("country", "GB")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
@@ -27,7 +27,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 								.Create
 								.WithArtistId(1)
 								.WithParameter("country", "GB")
-								.Please();
+								.PleaseAsync();
 			
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
@@ -42,7 +42,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 					.WithParameter("artistId", "1")
 					.WithParameter("page", "2")
 					.WithParameter("pageSize", "10")
-					.Please();
+					.PleaseAsync();
 			} 
 			catch(ApiXmlException ex)
 			{

@@ -14,7 +14,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 
 			var releaseTracks = Api<ReleaseTracks>.Create
 				.ForReleaseId(155408)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(releaseTracks, Is.Not.Null);
 			Assert.That(releaseTracks.Tracks.Count, Is.EqualTo(10));
@@ -28,7 +28,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 
 			var releaseTracks = Api<ReleaseTracks>.Create
 				.ForReleaseId(394123)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(releaseTracks, Is.Not.Null);
 			Assert.That(releaseTracks.Tracks.Count, Is.EqualTo(1));
@@ -41,7 +41,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 
 			var releaseTracks = Api<ReleaseTracks>.Create
 				.ForReleaseId(1193196)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(releaseTracks, Is.Not.Null);
 			Assert.That(releaseTracks.Tracks.Count, Is.EqualTo(8));

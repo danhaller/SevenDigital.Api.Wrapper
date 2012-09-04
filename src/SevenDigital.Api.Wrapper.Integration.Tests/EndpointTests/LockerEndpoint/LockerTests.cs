@@ -22,7 +22,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.LockerEndpoin
 		{
 			var locker = Api<Locker>.Create
 				.ForUser(_token, _tokenSecret)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(locker.Response.LockerReleases.Count, Is.GreaterThan(0));
 		}
@@ -33,7 +33,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.LockerEndpoin
 			var locker = Api<Locker>.Create
 				.ForReleaseId(343418)
 				.ForUser(_token, _tokenSecret)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(locker.Response.LockerReleases.Count, Is.EqualTo(1));
 		}
@@ -45,7 +45,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.LockerEndpoin
 				.ForReleaseId(343418)
 				.ForTrackId(3846716)
 				.ForUser(_token, _tokenSecret)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(locker.Response.LockerReleases.FirstOrDefault().LockerTracks.Count, Is.EqualTo(1));
 		}

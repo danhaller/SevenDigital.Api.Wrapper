@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using NUnit.Framework;
 using SevenDigital.Api.Wrapper.Utility.Http;
+using HttpClient = SevenDigital.Api.Wrapper.Utility.Http.HttpClient;
 
 namespace SevenDigital.Api.Wrapper.Integration.Tests.Utility.Http
 {
@@ -21,78 +24,55 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Utility.Http
 		}
 
 		[Test]
-		public void Can_resolve_uri()
+		public async void Can_resolve_uri()
 		{
 			string url = string.Format("{0}/status?oauth_consumer_key={1}", ApiUrl, consumerKey);
-			var request = new Request(url,  new Dictionary<string, string>());
+			var request = new GetRequest(url,  new Dictionary<string, string>());
 
-			var response = new HttpClient().Get(request);
-			AssertResponse(response, HttpStatusCode.OK);
-		}
-
-		[Test]
-		public void Can_resolve_uri_async()
-		{
-			string url = string.Format("{0}/status?oauth_consumer_key={1}", ApiUrl, consumerKey);
-			var request = new Request(url, new Dictionary<string, string>());
-
-			AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-			IResponse response = null;
-
-			Action<IResponse> callback = callbackResponse =>
-			{
-				response = callbackResponse;
-				autoResetEvent.Set();
-			};
-
-			new HttpClient().GetAsync(request, callback);
-
-			var signalled = autoResetEvent.WaitOne(AsyncTimeout);
-			Assert.That(signalled, Is.True, "event was not signalled");
+			var response = await new HttpClient().GetAsync(request);
 
 			AssertResponse(response, HttpStatusCode.OK);
 		}
 
 		[Test]
-		public void Bad_url_should_return_not_found()
+		public async void Can_resolve_uri_async()
+		{
+			string url = string.Format("{0}/status?oauth_consumer_key={1}", ApiUrl, consumerKey);
+            var request = new GetRequest(url, new Dictionary<string, string>());
+
+			var response = await new HttpClient().GetAsync(request);
+
+			AssertResponse(response, HttpStatusCode.OK);
+		}
+
+		[Test]
+        public async void Bad_url_should_return_not_found()
 		{
 			string url = string.Format("{0}/foo/bar/fish/1234?oauth_consumer_key={1}", ApiUrl, consumerKey);
-			var request = new Request(url, new Dictionary<string, string>());
+            var request = new GetRequest(url, new Dictionary<string, string>());
 
-			var response = new HttpClient().Get(request);
+			var response = await new HttpClient().GetAsync(request);
 			AssertResponse(response, HttpStatusCode.NotFound);
 		}
 
 		[Test]
-		public void Bad_url_should_return_not_found_async()
+		public async void Bad_url_should_return_not_found_async()
 		{
 			string url = string.Format("{0}/foo/bar/fish/1234?oauth_consumer_key={1}", ApiUrl, consumerKey);
-			var request = new Request(url, new Dictionary<string, string>());
+            var request = new GetRequest(url, new Dictionary<string, string>());
 
-			AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-			IResponse response = null;
-
-			Action<IResponse> callback = callbackResponse =>
-			{
-				response = callbackResponse;
-				autoResetEvent.Set();
-			};
-
-			new HttpClient().GetAsync(request, callback);
-
-			var signalled = autoResetEvent.WaitOne(AsyncTimeout);
-			Assert.That(signalled, Is.True, "event was not signalled");
+			var response = await new HttpClient().GetAsync(request);
 
 			AssertResponse(response, HttpStatusCode.NotFound);
 		}
 
 		[Test]
-		public void No_key_should_return_unauthorized()
+        public async void No_key_should_return_unauthorized()
 		{
 			string url = string.Format("{0}/status", ApiUrl);
-			var request = new Request(url, new Dictionary<string, string>());
+            var request = new GetRequest(url, new Dictionary<string, string>());
 
-			var response = new HttpClient().Get(request);
+			var response = await new HttpClient().GetAsync(request);
 			AssertResponse(response, HttpStatusCode.Unauthorized);
 		}
 
@@ -100,18 +80,18 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Utility.Http
 		[Ignore("There was a NullReferenceException that this test catches, however we don't enable this by default because:" +
 		"1: It would slow down the build a lot." + 
 		"2: It would depend on a hanging-web.app being set up for the test.")]
-		public void Can_cope_with_timeouts()
+        public async void Can_cope_with_timeouts()
 		{
 			var apiUrl = "http://hanging-web-app.7digital.local";
-			var request = new Request(apiUrl, new Dictionary<string, string>());
+            var request = new GetRequest(apiUrl, new Dictionary<string, string>());
 
-			var response = new HttpClient().Get(request);
+			var response = await new HttpClient().GetAsync(request);
 			AssertResponse(response, HttpStatusCode.OK);
 		}
 
 
 		[Test]
-		public void bad_url_post__should_return_not_found()
+        public async void bad_url_post__should_return_not_found()
 		{
 			string url = string.Format("{0}/foo/bar/fish/1234?oauth_consumer_key={1}", ApiUrl, consumerKey);
 			var parameters = new Dictionary<string, string>
@@ -119,14 +99,14 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Utility.Http
 					{"foo", "bar"}
 				};
 
-			var request = new Request(url, new Dictionary<string, string>(), parameters);
+            var request = new PostRequest(url, new Dictionary<string, string>(), parameters);
 
-			var response = new HttpClient().Post(request);
+			var response = await new HttpClient().PostAsync(request);
 			AssertResponse(response, HttpStatusCode.NotFound);
 		}
 
 		[Test]
-		public void bad_url_post_should_return_not_found_async()
+		public async void bad_url_post_should_return_not_found_async()
 		{
 			string url = string.Format("{0}/foo/bar/fish/1234?oauth_consumer_key={1}", ApiUrl, consumerKey);
 			var parameters = new Dictionary<string, string>
@@ -134,31 +114,20 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Utility.Http
 					{"foo", "bar"}
 				};
 
-			var request = new Request(url, new Dictionary<string, string>(), parameters);
+			var request = new PostRequest(url, new Dictionary<string, string>(), parameters);
 
-			AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-			IResponse response = null;
-
-			Action<IResponse> callback = callbackResponse =>
-			{
-				response = callbackResponse;
-				autoResetEvent.Set();
-			};
-
-			new HttpClient().PostAsync(request, callback);
-
-			var signalled = autoResetEvent.WaitOne(AsyncTimeout);
-			Assert.That(signalled, Is.True, "event was not signalled");
-
+			var response = await new HttpClient().PostAsync(request);
 			AssertResponse(response, HttpStatusCode.NotFound);
 		}
 
-		private static void AssertResponse(IResponse response, HttpStatusCode expectedCode)
+		private static async void AssertResponse(HttpResponseMessage response, HttpStatusCode expectedCode)
 		{
 			Assert.That(response, Is.Not.Null, "No response");
 			Assert.That(response.StatusCode, Is.EqualTo(expectedCode), "Unexpected http status code");
-			Assert.That(response.Headers.Count, Is.GreaterThan(0), "No headers found");
-			Assert.That(response.Body, Is.Not.Empty, "No response body found");
+			Assert.That(response.Headers.GetEnumerator().Count(), Is.GreaterThan(0), "No headers found");
+
+            var contents = await response.Content.ReadAsStringAsync();
+            Assert.That(string.IsNullOrWhiteSpace(contents), Is.False, "No response body found");
 		}
 	}
 }

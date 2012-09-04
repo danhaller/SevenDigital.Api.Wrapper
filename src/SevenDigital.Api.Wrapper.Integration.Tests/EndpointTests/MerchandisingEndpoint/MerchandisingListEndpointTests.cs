@@ -14,7 +14,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.Merchandising
 				.Create
 				.WithKey("tabAlbums")
 				.WithParameter("shopId", "34")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(merchList, Is.Not.Null);
 			Assert.That(merchList.Key, Is.EqualTo("tabAlbums"));

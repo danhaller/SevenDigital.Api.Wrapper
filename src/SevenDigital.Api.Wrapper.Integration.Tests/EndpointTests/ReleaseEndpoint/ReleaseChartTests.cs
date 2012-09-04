@@ -17,7 +17,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 				.WithParameter("fromDate", "20110101")
 				.WithParameter("toDate", "20110301")
 				.WithParameter("country", "GB")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.ChartItems.Count, Is.GreaterThan(0));
@@ -34,7 +34,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 				.WithParameter("toDate", "20110101")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "20")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));
@@ -48,7 +48,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 							.Create
 							.WithToDate(new DateTime(2011, 01, 31))
 							.WithPeriod(ChartPeriod.Week)
-							.Please();
+							.PleaseAsync();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.ChartItems.Count, Is.EqualTo(10));

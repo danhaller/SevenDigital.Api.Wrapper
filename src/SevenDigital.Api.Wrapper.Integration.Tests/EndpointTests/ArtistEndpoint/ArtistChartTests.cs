@@ -19,7 +19,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 							.WithToDate(chartDate)
 							.WithPeriod(ChartPeriod.Week)
 							.WithPageSize(20)
-							.Please();
+							.PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.ChartItems.Count, Is.EqualTo(20));

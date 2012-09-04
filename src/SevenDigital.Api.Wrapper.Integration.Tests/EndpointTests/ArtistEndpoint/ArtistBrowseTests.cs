@@ -11,7 +11,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		{
 			var artistBrowse = Api<ArtistBrowse>.Create
 									.WithLetter("radio")
-									.Please();
+									.PleaseAsync();
 			
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(1));
@@ -27,7 +27,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 									.WithLetter("radio")
 									.WithPageNumber(2)
 									.WithPageSize(20)
-									.Please();
+									.PleaseAsync();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));

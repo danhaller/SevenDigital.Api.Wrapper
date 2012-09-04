@@ -13,7 +13,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 			ArtistSearch artist = new FluentApi<ArtistSearch>()
 				.WithParameter("q", "pink")
 				.WithParameter("country", "GB")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 		}
@@ -25,7 +25,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 							.Create
 							.WithQuery("radiohe")
 							.WithParameter("sort","popularity+desc")
-							.Please();
+							.PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 			
@@ -39,7 +39,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 				.Create
 				.WithQuery("pink")
 				.WithParameter("country", "GB")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(artistSearch, Is.Not.Null);
 			
@@ -52,7 +52,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 				.WithParameter("q", "pink")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "20")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));
@@ -66,7 +66,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
                 .WithParameter("q", "pink")
                 .WithParameter("page", "1")
                 .WithParameter("pageSize", "20")
-                .Please();
+                .PleaseAsync();
 
             Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
             
@@ -79,7 +79,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 									.WithQuery("pink")
 									.WithPageNumber(1)
 									.WithPageSize(20)
-									.Please();
+									.PleaseAsync();
 
 			Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
 

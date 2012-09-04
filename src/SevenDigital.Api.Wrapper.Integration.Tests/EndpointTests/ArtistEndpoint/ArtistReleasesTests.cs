@@ -14,7 +14,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 			var artist = Api<ArtistReleases>
 				.Create
 				.WithArtistId(1)
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Releases.Count, Is.GreaterThan(0));
@@ -29,7 +29,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 				.WithPageNumber(2)
 				.WithPageSize(20)
 				.WithParameter("artistId","1")
-				.Please();
+				.PleaseAsync();
 			
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));

@@ -14,7 +14,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 			ReleaseByDate release = Api<ReleaseByDate>.Create
 				.WithParameter("toDate", DateTime.Now.ToString("yyyyMMdd"))
 				.WithParameter("country", "GB")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.Releases.Count, Is.GreaterThan(0));
@@ -28,7 +28,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 				.WithParameter("toDate", "20110101")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "20")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));

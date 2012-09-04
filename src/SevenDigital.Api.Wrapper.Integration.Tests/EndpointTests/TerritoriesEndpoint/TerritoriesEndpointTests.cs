@@ -13,7 +13,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TerritoriesEn
 				.Create
 				.WithIpAddress("84.45.95.241")
 				.WithParameter("shopId", "34")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(countryForIp, Is.Not.Null);
 			Assert.That(countryForIp.CountryCode, Is.EqualTo("7"));
@@ -26,7 +26,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TerritoriesEn
 				.Create
 				.WithIpAddress("84.45.95.241")
 				.WithParameter("shopId", "34")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(restrictions, Is.Not.Null);
 			Assert.That(restrictions.AllowCheckout, Is.True);
@@ -39,7 +39,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TerritoriesEn
 				.Create
 				.WithIpAddress("1.2.3.4")
 				.WithParameter("shopId", "34")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(restrictions, Is.Not.Null);
 			Assert.That(restrictions.AllowCheckout, Is.False);
@@ -51,7 +51,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TerritoriesEn
 			var restrictions = Api<GeoRestrictions>
 				.Create
 				.WithIpAddress("84.45.95.241")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(restrictions, Is.Not.Null);
 			Assert.That(restrictions.AllowCheckout, Is.True);

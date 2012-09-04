@@ -13,7 +13,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 			Release release = Api<Release>.Create
 				.WithParameter("releaseId", "155408")
 				.WithParameter("country", "GB")
-				.Please();
+				.PleaseAsync();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.Title, Is.EqualTo("Dreams"));

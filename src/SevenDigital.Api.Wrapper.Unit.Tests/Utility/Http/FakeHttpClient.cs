@@ -1,39 +1,31 @@
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using SevenDigital.Api.Wrapper.Utility.Http;
 
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 {
 	public class FakeHttpClient : IHttpClient
 	{
-		private readonly Response _fakeResponse;
+        private readonly HttpResponseMessage _fakeResponse;
 
 		public FakeHttpClient()
 		{
 		}
 
-		public FakeHttpClient(Response fakeResponse)
+        public FakeHttpClient(HttpResponseMessage fakeResponse)
 		{
 			_fakeResponse = fakeResponse;
 		}
 
-        public Response Get(GetRequest request)
+        public async Task<HttpResponseMessage> GetAsync(GetRequest request)
 		{
-			throw new NotImplementedException();
+			return await Task.Factory.StartNew(() => _fakeResponse);
 		}
 
-		public void GetAsync(GetRequest request, Action<Response> callback)
+        public async Task<HttpResponseMessage> PostAsync(PostRequest request)
 		{
-			callback(_fakeResponse);
-		}
-
-		public Response Post(GetRequest request)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void PostAsync(PostRequest request, Action<Response> callback)
-		{
-			throw new NotImplementedException();
-		}
+            return await Task.Factory.StartNew(() => _fakeResponse);
+        }
 	}
 }

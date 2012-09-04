@@ -15,13 +15,6 @@ namespace SevenDigital.Api.Wrapper.Utility.Http
             _headers = headers;
         }
 
-
-        public GetRequest()
-        {
-            _url = string.Empty;
-            _headers = new Dictionary<string, string>();
-        }
-
         public string Url
         {
             get { return _url; }

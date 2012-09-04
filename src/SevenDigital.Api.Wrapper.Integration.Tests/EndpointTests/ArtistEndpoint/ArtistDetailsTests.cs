@@ -13,7 +13,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 			var artist = Api<Artist>
 			    .Create
 			    .WithArtistId(1)
-			    .Please();
+			    .PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Name, Is.EqualTo("Keane"));
@@ -23,23 +23,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		}
 
         [Test]
-        public void Can_hit_endpoint_with_fluent_async_api()
+        public async void Can_hit_endpoint_with_fluent_async_api()
         {
-            Artist artist = null;
-
-            var reset = new AutoResetEvent(false);
-
-               Api<Artist>
+            Artist artist = await Api<Artist>
                 .Create
                 .WithArtistId(1)
-                .PleaseAsync(payload =>
-                                 {
-                                     artist = payload;
-                                     reset.Set();
-                                 });
+                .PleaseAsync();
 
-
-            reset.WaitOne(1000 * 60);
             Assert.That(artist, Is.Not.Null);
             Assert.That(artist.Name, Is.EqualTo("Keane"));
             Assert.That(artist.SortName, Is.EqualTo("Keane"));
