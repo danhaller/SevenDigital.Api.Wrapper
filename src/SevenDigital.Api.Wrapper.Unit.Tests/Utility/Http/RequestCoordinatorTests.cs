@@ -32,7 +32,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 		[Test]
 		public void Should_fire_resolve_with_correct_values()
 		{
-			A.CallTo(() => _httpClient.Get(A<IRequest>.Ignored))
+            A.CallTo(() => _httpClient.Get(A<GetRequest>.Ignored))
 				.Returns(new Response
 					{
 						Body = SERVICE_STATUS,
@@ -49,14 +49,14 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 			_requestCoordinator.HitEndpoint(endPointState);
 
 			A.CallTo(() => _httpClient
-					.Get(A<IRequest>.That.Matches(y => y.Url == expected)))
+                    .GetAsync(A<GetRequest>.That.Matches(y => y.Url == expected)))
 					.MustHaveHappened();
 		}
 
 		[Test]
 		public void Should_fire_resolve_with_url_encoded_parameters()
 		{
-			A.CallTo(() => _httpClient.Get(A<IRequest>.Ignored))
+            A.CallTo(() => _httpClient.GetAsync(A<GetRequest>.Ignored))
 				.Returns(new Response
 					{
 						Body = SERVICE_STATUS,
@@ -75,7 +75,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 			_requestCoordinator.HitEndpoint(endPointState);
 
 			A.CallTo(() => _httpClient
-					.Get(A<IRequest>.That.Matches(y => y.Url == expected)))
+                    .GetAsync(A<GetRequest>.That.Matches(y => y.Url == expected)))
 					.MustHaveHappened();
 		}
 
@@ -98,7 +98,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 		{
 			Given_a_urlresolver_that_returns_valid_xml();
 
-			var response = _requestCoordinator.HitEndpoint(new EndPointInfo());
+			var response = _requestCoordinator.HitEndpointAsync(new EndPointInfo());
 			var hitEndpoint = new XmlDocument();
 			hitEndpoint.LoadXml(response.Body);
 			Assert.That(hitEndpoint.HasChildNodes);
@@ -160,8 +160,8 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 
 			A.CallTo(() => apiUri.Uri).MustHaveHappened(Repeated.Exactly.Once);
 
-			A.CallTo(() => _httpClient.Get(
-				A<IRequest>.That.Matches(x => x.Url.ToString().Contains(expectedApiUri))))
+			A.CallTo(() => _httpClient.GetAsync(
+                A<GetRequest>.That.Matches(x => x.Url.ToString().Contains(expectedApiUri))))
 				.MustHaveHappened(Repeated.Exactly.Once);
 		}
 
@@ -186,7 +186,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 
 		private void Given_a_urlresolver_that_returns_valid_xml()
 		{
-			A.CallTo(() => _httpClient.Get(A<IRequest>.Ignored))
+            A.CallTo(() => _httpClient.GetAsync(A<GetRequest>.Ignored))
 				.Returns(new Response
 					{
 						StatusCode = HttpStatusCode.OK,

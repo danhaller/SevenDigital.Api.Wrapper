@@ -17,13 +17,9 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.ReleaseEndpoint
 		public void should_deserialize_emtpy_release_type_to_unknown()
 		{
 			var responseXml = File.ReadAllText("StubResponses/ArtistReleases.xml");
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.OK,
-					Body = responseXml
-				};
+			var response = new Response(HttpStatusCode.OK, responseXml);
 
-			var xmlSerializer = new ResponseDeserializer<ArtistReleases>();
+            var xmlSerializer = new ResponseDeserializer<ArtistReleases>();
 			var release =  xmlSerializer.Deserialize(response).Releases.First();
 
 			Assert.That(release.Type,Is.EqualTo(ReleaseType.Unknown));

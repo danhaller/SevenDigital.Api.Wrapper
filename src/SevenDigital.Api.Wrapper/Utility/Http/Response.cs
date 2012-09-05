@@ -17,5 +17,13 @@ namespace SevenDigital.Api.Wrapper.Utility.Http
             Headers = headers;
             Body = body;
         }
+
+        public Response(HttpStatusCode statusCode, string body)
+        {
+            StatusCode = statusCode;
+            Headers = new Dictionary<string, string>();
+            Body = body;
+        }
+
     }
 }

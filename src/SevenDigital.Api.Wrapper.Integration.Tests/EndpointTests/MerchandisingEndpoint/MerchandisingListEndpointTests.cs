@@ -8,9 +8,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.Merchandising
 	public class MerchandisingListEndpointTests
 	{
 		[Test, Ignore("In beta testing")]
-		public void Can_hit_fluent_endpoint_for_merchandising()
+		public async void Can_hit_fluent_endpoint_for_merchandising()
 		{
-			var merchList = Api<MerchandisingList>
+			var merchList = await Api<MerchandisingList>
 				.Create
 				.WithKey("tabAlbums")
 				.WithParameter("shopId", "34")

@@ -3,9 +3,12 @@ using System.Linq.Expressions;
 using System.Net;
 using FakeItEasy;
 using NUnit.Framework;
-using SevenDigital.Api.Wrapper.EndpointResolution;
-using SevenDigital.Api.Schema;
 using System.Threading;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Net.Http;
+using SevenDigital.Api.Schema;
+using SevenDigital.Api.Wrapper.EndpointResolution;
 using SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http;
 using SevenDigital.Api.Wrapper.Utility.Http;
 
@@ -16,22 +19,18 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 	{
 		private const string VALID_STATUS_XML = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"ok\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\"><serviceStatus><serverTime>2011-05-31T15:31:22Z</serverTime></serviceStatus></response>";
 
-		private readonly Response stubResponse  = new Response
-			{
-				StatusCode = HttpStatusCode.OK,
-				Body = VALID_STATUS_XML
-			};
+		private readonly Response stubResponse  = new Response(HttpStatusCode.OK, VALID_STATUS_XML);
 
 		[Test]
 		public void Should_fire_requestcoordinator_with_correct_endpoint_on_resolve()
 		{
 			var requestCoordinator = A.Fake<IRequestCoordinator>();
-			A.CallTo(() => requestCoordinator.HitEndpoint(A<EndPointInfo>.Ignored)).Returns(stubResponse);
+            A.CallTo(() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.Ignored)).Returns(stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).Please();
 
 			Expression<Func<Response>> callWithEndpointStatus =
-				() => requestCoordinator.HitEndpoint(A<EndPointInfo>.That.Matches(x => x.UriPath == "status"));
+                () => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.That.Matches(x => x.UriPath == "status"));
 
 			A.CallTo(callWithEndpointStatus).MustHaveHappened(Repeated.Exactly.Once);
 		}
@@ -45,7 +44,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 			new FluentApi<Status>(requestCoordinator).WithMethod("POST").Please();
 
 			Expression<Func<Response>> callWithMethodPost =
-				() => requestCoordinator.HitEndpoint(A<EndPointInfo>.That.Matches(x => x.HttpMethod == "POST"));
+				() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.That.Matches(x => x.HttpMethod == "POST"));
 
 			A.CallTo(callWithMethodPost).MustHaveHappened(Repeated.Exactly.Once);
 		}
@@ -54,12 +53,12 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		public void Should_fire_requestcoordinator_with_correct_parameters_on_resolve()
 		{
 			var requestCoordinator = A.Fake<IRequestCoordinator>();
-			A.CallTo(() => requestCoordinator.HitEndpoint(A<EndPointInfo>.Ignored)).Returns(stubResponse);
+            A.CallTo(() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.Ignored)).Returns(stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).WithParameter("artistId", "123").Please();
 
 			Expression<Func<Response>> callWithArtistId123 =
-				() => requestCoordinator.HitEndpoint(A<EndPointInfo>.That.Matches(x => x.Parameters["artistId"] == "123"));
+                () => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.That.Matches(x => x.Parameters["artistId"] == "123"));
 
 			A.CallTo(callWithArtistId123).MustHaveHappened();
 
@@ -75,41 +74,22 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 			Assert.That(fakeRequestCoordinator.HttpClient, Is.EqualTo(fakeHttpClient));
 		}
 
-		[Test]
-		public void should_put_payload_in_action_result()
-		{
-			var requestCoordinator = new FakeRequestCoordinator { StubPayload = stubResponse };
-			var reset = new AutoResetEvent(false);
+        [Test]
+        public async void should_put_payload_in_action_result()
+        {
+            var requestCoordinator = new FakeRequestCoordinator { StubPayload = stubResponse };
 
-			new FluentApi<Status>(requestCoordinator)
-				.PleaseAsync(
-				status =>
-				{
-					Assert.That(status, Is.Not.Null);
-					reset.Set();
-				});
+            var status = await new FluentApi<Status>(requestCoordinator)
+                .PleaseAsync();
 
-			var result = reset.WaitOne(1000 * 60);
-			Assert.That(result, Is.True, "Method");
-		}
-
-		
+            Assert.That(status, Is.Not.Null);
+        }
 
 		public class FakeRequestCoordinator : IRequestCoordinator
 		{
-			public Response HitEndpoint(EndPointInfo endPointInfo)
+            public async Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
 			{
 				throw new NotImplementedException();
-			}
-
-			public Response HitEndpointAndGetResponse(EndPointInfo endPointInfo)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void HitEndpointAsync(EndPointInfo endPointInfo, Action<Response> callback)
-			{
-				callback(StubPayload);
 			}
 
 			public string ConstructEndpoint(EndPointInfo endPointInfo)

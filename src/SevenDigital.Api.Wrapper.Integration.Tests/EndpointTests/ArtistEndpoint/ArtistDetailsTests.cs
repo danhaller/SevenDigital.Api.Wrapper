@@ -8,9 +8,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 	public class ArtistDetailsTests
 	{
 		[Test]
-		public void Can_hit_endpoint_with_fluent_interface()
+		public async void Can_hit_endpoint_with_fluent_interface()
 		{
-			var artist = Api<Artist>
+			var artist = await Api<Artist>
 			    .Create
 			    .WithArtistId(1)
 			    .PleaseAsync();
