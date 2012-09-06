@@ -6,7 +6,6 @@ using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 {
-
     public class GetRequestHandler : RequestHandler
 	{
 		private readonly IOAuthCredentials _oAuthCredentials;
