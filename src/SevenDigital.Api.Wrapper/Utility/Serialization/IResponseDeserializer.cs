@@ -2,7 +2,7 @@
 
 namespace SevenDigital.Api.Wrapper.Utility.Serialization
 {
-    public interface IResponseDeserializer<T>
+    public interface IResponseDeserializer<out T>
 	{
         T Deserialize(Response response);
 	}

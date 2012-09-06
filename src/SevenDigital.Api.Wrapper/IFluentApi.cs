@@ -1,14 +1,9 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using SevenDigital.Api.Wrapper.Utility.Http;
 
 namespace SevenDigital.Api.Wrapper
 {
-    using System.Threading.Tasks;
-
-    // [AD] DO NOT PUT THE OUR BACK IN, NOT SUPPORTED IN WINDOWS PHONE
-	// ReSharper disable TypeParameterCanBeVariant
 	public interface IFluentApi<T>
-	// ReSharper restore TypeParameterCanBeVariant
 	{
 		IFluentApi<T> WithParameter(string key, string value);
 		IFluentApi<T> ClearParameters();

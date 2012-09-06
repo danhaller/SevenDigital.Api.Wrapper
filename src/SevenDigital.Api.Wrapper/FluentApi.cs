@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using SevenDigital.Api.Schema.OAuth;
@@ -9,13 +10,10 @@ using SevenDigital.Api.Schema.Attributes;
 using SevenDigital.Api.Wrapper.Utility.Http;
 using SevenDigital.Api.Wrapper.Utility.Serialization;
 
+using HttpClient = SevenDigital.Api.Wrapper.Utility.Http.HttpClient;
+
 namespace SevenDigital.Api.Wrapper
 {
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-
-    using HttpClient = SevenDigital.Api.Wrapper.Utility.Http.HttpClient;
-
     public class FluentApi<T> : IFluentApi<T> where T : class
 	{
 		private readonly EndPointInfo _endPointInfo = new EndPointInfo();
@@ -41,25 +39,31 @@ namespace SevenDigital.Api.Wrapper
 
 
 			OAuthSignedAttribute isSigned = typeof(T).GetCustomAttributes(true)
-												.OfType<OAuthSignedAttribute>()
-												.FirstOrDefault();
+				.OfType<OAuthSignedAttribute>()
+				.FirstOrDefault();
 
 			if (isSigned != null)
+			{
 				_endPointInfo.IsSigned = true;
+			}
 
 			RequireSecureAttribute isSecure = typeof(T).GetCustomAttributes(true)
-											.OfType<RequireSecureAttribute>()
-											.FirstOrDefault();
+				.OfType<RequireSecureAttribute>()
+				.FirstOrDefault();
 
 			if (isSecure != null)
+			{
 				_endPointInfo.UseHttps = true;
+			}
 
 			HttpPostAttribute isHttpPost = typeof(T).GetCustomAttributes(true)
-								.OfType<HttpPostAttribute>()
-								.FirstOrDefault();
-			if (isHttpPost != null)
-				_endPointInfo.HttpMethod = "POST";
+				.OfType<HttpPostAttribute>()
+				.FirstOrDefault();
 
+			if (isHttpPost != null)
+			{
+				_endPointInfo.HttpMethod = "POST";
+			}
 		}
 
 		public FluentApi(IOAuthCredentials oAuthCredentials, IApiUri apiUri)
@@ -67,7 +71,6 @@ namespace SevenDigital.Api.Wrapper
 
 		public FluentApi()
 			: this(new RequestCoordinator(new HttpClient(), new UrlSigner(), EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance)) { }
-
 
 		public IFluentApi<T> WithEndpoint(string endpoint)
 		{
@@ -121,7 +124,7 @@ namespace SevenDigital.Api.Wrapper
 		{
 		   var httpResponse = await	_requestCoordinator.HitEndpointAsync(_endPointInfo);
            var response = await MakeResponse(httpResponse);
-		    return _deserializer.Deserialize(response);
+		   return _deserializer.Deserialize(response);
 		}
 
         private async Task<Response> MakeResponse(HttpResponseMessage httpResponse)
@@ -130,11 +133,6 @@ namespace SevenDigital.Api.Wrapper
             var headers = HttpHelpers.MapHeaders(httpResponse.Headers);
             Response response = new Response(httpResponse.StatusCode, headers, responseBody);
             return response;
-        }
-
-        private IDictionary<string, string> ParseHeaders(HttpResponseHeaders headers)
-        {
-            throw new NotImplementedException();
         }
 
         public IDictionary<string, string> Parameters { get { return _endPointInfo.Parameters; } }
