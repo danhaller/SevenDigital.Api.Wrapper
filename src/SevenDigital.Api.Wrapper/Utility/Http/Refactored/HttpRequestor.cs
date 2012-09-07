@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SevenDigital.Api.Wrapper.EndpointResolution;
@@ -15,12 +14,14 @@ namespace SevenDigital.Api.Wrapper.Utility.Http.Refactored
 		private readonly IUrlSigner _urlSigner;
 		private readonly IOAuthCredentials _oAuthCredentials;
 		private readonly IApiUri _apiUri;
+		private readonly IHttpClientWrapper _httpClient;
 
-		public HttpRequestor(IUrlSigner urlSigner, IOAuthCredentials oAuthCredentials, IApiUri apiUri)
+		public HttpRequestor(IUrlSigner urlSigner, IOAuthCredentials oAuthCredentials, IApiUri apiUri, IHttpClientWrapper httpClient)
 		{
 			_urlSigner = urlSigner;
 			_oAuthCredentials = oAuthCredentials;
 			_apiUri = apiUri;
+			_httpClient = httpClient;
 		}
 
 		public Task<Response> GetDataAsync(RequestData requestData)
@@ -42,26 +43,15 @@ namespace SevenDigital.Api.Wrapper.Utility.Http.Refactored
 			var uri = ConstructEndpoint(requestData);
 			var signedUrl = SignHttpGetUrl(uri, requestData);
 
-			var httpClient = MakeHttpClient(requestData.Headers);
-			var httpResponseMessage = await httpClient.GetAsync(signedUrl);
-
-			return await MakeResponse(httpResponseMessage);
+			return await _httpClient.GetAsync(requestData.Headers, signedUrl);
 		}
 
 		public async Task<Response> HitPostEndpoint(RequestData requestData)
 		{
-			var uri = ConstructEndpoint(requestData);
-			var signedParams = SignHttpPostParams(uri, requestData);
+			var url = ConstructEndpoint(requestData);
+			var signedParams = SignHttpPostParams(url, requestData);
 
-			var httpClient = MakeHttpClient(requestData.Headers);
-
-			string postData = signedParams.ToQueryString();
-			HttpContent content = new StringContent(postData);
-			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-			var httpResponseMessage = await httpClient.PostAsync(uri, content);
-
-			return await MakeResponse(httpResponseMessage);
+			return await _httpClient.PostAsync(requestData.Headers, signedParams, url);
 		}
 
 		private string SignHttpGetUrl(string uri, RequestData requestData)
@@ -86,13 +76,14 @@ namespace SevenDigital.Api.Wrapper.Utility.Http.Refactored
 		{
 			var apiUri = requestData.UseHttps ? _apiUri.SecureUri : _apiUri.Uri;
 
-			var scratchParams = new Dictionary<string, string>(requestData.Parameters);
-			var uriString = string.Format("{0}/{1}", apiUri, SubstituteRouteParameters(requestData.UriPath, scratchParams));
+			var mutableParams = new Dictionary<string, string>(requestData.Parameters);
+			var route = SubstituteRouteParameters(requestData.UriPath, mutableParams);
+			var uriString = apiUri + "/" + route;
 
 			if (requestData.HttpMethod == HttpMethod.Get)
 			{
 				var oauthParam = "oauth_consumer_key=" + _oAuthCredentials.ConsumerKey;
-				var otherQueryParams = scratchParams.ToQueryString(true);
+				var otherQueryParams = mutableParams.ToQueryString(true);
 				uriString = uriString + "?" + oauthParam + "&" + otherQueryParams;
 			}
 			return uriString;
@@ -111,28 +102,6 @@ namespace SevenDigital.Api.Wrapper.Utility.Http.Refactored
 			}
 
 			return endpointUri.ToLower();
-		}
-
-		private System.Net.Http.HttpClient MakeHttpClient(IDictionary<string, string> headers)
-		{
-			var httpClient = new System.Net.Http.HttpClient();
-
-			foreach (var header in headers)
-			{
-				httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
-			}
-
-			var productInfo = new ProductInfoHeaderValue("7digital .Net Api Wrapper", "4.5");
-			httpClient.DefaultRequestHeaders.UserAgent.Add(productInfo);
-
-			return httpClient;
-		}
-
-		private static async Task<Response> MakeResponse(HttpResponseMessage httpResponse)
-		{
-			string responseBody = await httpResponse.Content.ReadAsStringAsync();
-			var headers = HttpHelpers.MapHeaders(httpResponse.Headers);
-			return new Response(httpResponse.StatusCode, headers, responseBody);
 		}
 	}
 }
