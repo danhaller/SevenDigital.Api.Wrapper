@@ -22,8 +22,8 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution
 			foreach (var key in collection.Keys)
 			{
 				var parameter = shouldUrlEncode 
-								? Uri.EscapeDataString(collection[key]) 
-								: collection[key];
+					? Uri.EscapeDataString(collection[key]) 
+					: collection[key];
 
 				sb.AppendFormat("{0}={1}&", key, parameter);
 			}
