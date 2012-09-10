@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 using SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers;
 using SevenDigital.Api.Wrapper.Utility.Http;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution
 {
-    using System.Net.Http;
-    using System.Threading.Tasks;
-
-    public class RequestCoordinator : IRequestCoordinator
+	public class RequestCoordinator : IRequestCoordinator
 	{
 		private readonly IUrlSigner _urlSigner;
 		private readonly IOAuthCredentials _oAuthCredentials;

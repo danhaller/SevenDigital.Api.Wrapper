@@ -13,17 +13,17 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.LockerEndpoin
 
 		[SetUp]
 		public void RunOnce() 
-        {
-            if (string.IsNullOrEmpty(_token) || string.IsNullOrEmpty(_tokenSecret))
-            {
-                Assert.Ignore("these tests need an access token and secret to run");
-            }
+		{
+			if (string.IsNullOrEmpty(_token) || string.IsNullOrEmpty(_tokenSecret))
+			{
+				Assert.Ignore("these tests need an access token and secret to run");
+			}
 		}
 
 		[Test]
 		public async void Should_get_a_users_locker_with_correct_access_credentials()
 		{
-            var locker = await Api<Locker>.Create
+			var locker = await Api<Locker>.Create
 				.ForUser(_token, _tokenSecret)
 				.PleaseAsync();
 
@@ -31,9 +31,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.LockerEndpoin
 		}
 
 		[Test]
-        public async void Should_get_specific_users_release()
+		public async void Should_get_specific_users_release()
 		{
-            var locker = await Api<Locker>.Create
+			var locker = await Api<Locker>.Create
 				.ForReleaseId(343418)
 				.ForUser(_token, _tokenSecret)
 				.PleaseAsync();
@@ -42,7 +42,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.LockerEndpoin
 		}
 
 		[Test]
-        public async void Should_get_specific_users_track()
+		public async void Should_get_specific_users_track()
 		{
 			var locker = await Api<Locker>.Create
 				.ForReleaseId(343418)

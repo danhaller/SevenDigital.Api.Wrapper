@@ -6,10 +6,10 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 {
 	[TestFixture]
 	public class TagsTests 
-    {
+	{
 		[Test]
-        public async void Can_hit_endpoint()
-        {
+		public async void Can_hit_endpoint()
+		{
 
 			Tags tags = await Api<Tags>.Create
 				.PleaseAsync();
@@ -22,8 +22,8 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 		}
 
 		[Test]
-        public async void Can_hit_endpoint_with_paging() 
-        {
+		public async void Can_hit_endpoint_with_paging() 
+		{
 
 			Tags artistBrowse = await Api<Tags>.Create
 				.WithParameter("page", "2")

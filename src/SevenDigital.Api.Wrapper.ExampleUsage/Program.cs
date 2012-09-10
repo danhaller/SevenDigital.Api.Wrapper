@@ -8,9 +8,9 @@ using SevenDigital.Api.Schema.LockerEndpoint;
 namespace SevenDigital.Api.Wrapper.ExampleUsage 
 {
 	class Program 
-    {
+	{
 		static async void Main(string[] args) 
-        {
+		{
 			string s = args[0];
 
 			var appSettingsCredentials = new AppSettingsCredentials();
@@ -76,28 +76,28 @@ namespace SevenDigital.Api.Wrapper.ExampleUsage
 				.WithPageSize(10)
 				.PleaseAsync();
 
-            Console.WriteLine("Async Release search on \"{0}\" returns: {1} items", "Radio", result.TotalItems);
-            Console.WriteLine();
+			Console.WriteLine("Async Release search on \"{0}\" returns: {1} items", "Radio", result.TotalItems);
+			Console.WriteLine();
 
 			try 
-            {
+			{
 				// -- Deliberate error response
 				Console.WriteLine("Trying artist/details without artistId parameter...");
 				await Api<Artist>.Create.PleaseAsync();
 			} 
-            catch (ApiXmlException ex) 
-            {
+			catch (ApiXmlException ex) 
+			{
 				Console.WriteLine("{0} : {1}", ex.Error.Code, ex.Error.ErrorMessage);
 			}
 
 			try 
-            {
+			{
 				// -- Deliberate unauthorized response
 				Console.WriteLine("Trying user/locker without any credentials...");
 				await Api<Locker>.Create.PleaseAsync();
 			} 
-            catch (ApiXmlException ex) 
-            {
+			catch (ApiXmlException ex) 
+			{
 				Console.WriteLine("{0} : {1}", ex.Error.Code, ex.Error.ErrorMessage);
 			}
 

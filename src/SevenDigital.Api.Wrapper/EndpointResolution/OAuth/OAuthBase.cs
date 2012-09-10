@@ -211,7 +211,7 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.OAuth
 		/// Generate the signature base that is used to produce the signature
 		/// </summary>
 		/// <param name="url">The full url that needs to be signed including its non OAuth url parameters</param>
-		/// <param name="consumerKey">The consumer key</param>        
+		/// <param name="consumerKey">The consumer key</param>
 		/// <param name="token">The token, if available. If not available pass null or an empty string</param>
 		/// <param name="tokenSecret">The token secret, if available. If not available pass null or an empty string</param>
 		/// <param name="httpMethod">The http method used. Must be a valid HTTP method verb (POST,GET,PUT, etc)</param>
@@ -350,7 +350,7 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.OAuth
 		}
 
 		/// <summary>
-		/// Generate the timestamp for the signature        
+		/// Generate the timestamp for the signature
 		/// </summary>
 		/// <returns></returns>
 		public virtual string GenerateTimeStamp()

@@ -8,8 +8,7 @@ namespace SevenDigital.Api.Wrapper
 		{
 			get 
 			{ 
-				var api = new FluentApi<T>();
-				return api;
+				return new FluentApi<T>();
 			}
 		}
 	}

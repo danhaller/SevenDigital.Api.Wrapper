@@ -7,25 +7,25 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Http
 {
 	public class FakeHttpClient : IHttpClient
 	{
-        private readonly HttpResponseMessage _fakeResponse;
+		private readonly HttpResponseMessage _fakeResponse;
 
 		public FakeHttpClient()
 		{
 		}
 
-        public FakeHttpClient(HttpResponseMessage fakeResponse)
+		public FakeHttpClient(HttpResponseMessage fakeResponse)
 		{
 			_fakeResponse = fakeResponse;
 		}
 
-        public async Task<HttpResponseMessage> GetAsync(GetRequest request)
+		public async Task<HttpResponseMessage> GetAsync(GetRequest request)
 		{
 			return await Task.Factory.StartNew(() => _fakeResponse);
 		}
 
-        public async Task<HttpResponseMessage> PostAsync(PostRequest request)
+		public async Task<HttpResponseMessage> PostAsync(PostRequest request)
 		{
-            return await Task.Factory.StartNew(() => _fakeResponse);
-        }
+			return await Task.Factory.StartNew(() => _fakeResponse);
+		}
 	}
 }

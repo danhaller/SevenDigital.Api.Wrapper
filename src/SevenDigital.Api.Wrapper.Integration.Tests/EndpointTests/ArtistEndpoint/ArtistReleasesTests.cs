@@ -21,9 +21,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		}
 
 		[Test]
-        public async void Can_hit_endpoint_with_paging()
+		public async void Can_hit_endpoint_with_paging()
 		{
-            var artistBrowse = await Api<ArtistReleases>
+			var artistBrowse = await Api<ArtistReleases>
 				.Create
 				.WithPageNumber(2)
 				.WithPageSize(20)

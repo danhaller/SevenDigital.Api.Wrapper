@@ -7,7 +7,7 @@ using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 {
-    public class PostRequestHandler : RequestHandler
+	public class PostRequestHandler : RequestHandler
 	{
 		private readonly IOAuthCredentials _oAuthCredentials;
 		private readonly IUrlSigner _urlSigner;
@@ -18,21 +18,21 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 			_urlSigner = urlSigner;
 		}
 
-        public override Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
+		public override Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
 		{
-            var request = BuildPostRequest(endPointInfo); 
-            return HttpClient.PostAsync(request);
+			var request = BuildPostRequest(endPointInfo); 
+			return HttpClient.PostAsync(request);
 		}
 
-        private PostRequest BuildPostRequest(EndPointInfo endPointInfo)
-        {
-            var uri = ConstructEndpoint(endPointInfo);
-            var signedParams = SignHttpPostParams(uri, endPointInfo);
+		private PostRequest BuildPostRequest(EndPointInfo endPointInfo)
+		{
+			var uri = ConstructEndpoint(endPointInfo);
+			var signedParams = SignHttpPostParams(uri, endPointInfo);
 
-            return new PostRequest(uri, endPointInfo.Headers, signedParams);
-        }
+			return new PostRequest(uri, endPointInfo.Headers, signedParams);
+		}
 
-        private IDictionary<string, string> SignHttpPostParams(string uri, EndPointInfo endPointInfo)
+		private IDictionary<string, string> SignHttpPostParams(string uri, EndPointInfo endPointInfo)
 		{
 			if (endPointInfo.IsSigned)
 			{

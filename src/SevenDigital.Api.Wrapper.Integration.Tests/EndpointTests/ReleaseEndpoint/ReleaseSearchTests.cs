@@ -8,7 +8,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 	public class ReleaseSearchTests
 	{
 		[Test]
-        public async void Can_hit_endpoint()
+		public async void Can_hit_endpoint()
 		{
 			ReleaseSearch release = await Api<ReleaseSearch>.Create
 				.WithParameter("q", "no surprises")
@@ -35,17 +35,17 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 			Assert.That(artistBrowse.PageSize, Is.EqualTo(20));
 		}
 
-        [Test]
-        public async void Can_get_multiple_results()
-        {
-            var artistSearch = await Api<ReleaseSearch>.Create
-                .WithParameter("q", "pink")
-                .WithParameter("page", "1")
-                .WithParameter("pageSize", "20")
-                .PleaseAsync();
+		[Test]
+		public async void Can_get_multiple_results()
+		{
+			var artistSearch = await Api<ReleaseSearch>.Create
+				.WithParameter("q", "pink")
+				.WithParameter("page", "1")
+				.WithParameter("pageSize", "20")
+				.PleaseAsync();
 
-            Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
+			Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
 
-        }
+		}
 	}
 }

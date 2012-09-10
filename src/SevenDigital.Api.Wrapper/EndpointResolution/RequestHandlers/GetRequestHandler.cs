@@ -6,7 +6,7 @@ using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 {
-    public class GetRequestHandler : RequestHandler
+	public class GetRequestHandler : RequestHandler
 	{
 		private readonly IOAuthCredentials _oAuthCredentials;
 		private readonly IUrlSigner _urlSigner;
@@ -17,18 +17,18 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.RequestHandlers
 			_urlSigner = urlSigner;
 		}
 
-        public override Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
+		public override Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
 		{
-            GetRequest request = BuildGetRequest(endPointInfo);
-            return HttpClient.GetAsync(request);
+			GetRequest request = BuildGetRequest(endPointInfo);
+			return HttpClient.GetAsync(request);
 		}
 
-        private GetRequest BuildGetRequest(EndPointInfo endPointInfo)
-        {
-            var uri = ConstructEndpoint(endPointInfo);
-            var signedUrl = SignHttpGetUrl(uri, endPointInfo);
-            return new GetRequest(signedUrl, endPointInfo.Headers);
-        }
+		private GetRequest BuildGetRequest(EndPointInfo endPointInfo)
+		{
+			var uri = ConstructEndpoint(endPointInfo);
+			var signedUrl = SignHttpGetUrl(uri, endPointInfo);
+			return new GetRequest(signedUrl, endPointInfo.Headers);
+		}
 
 		private string SignHttpGetUrl(string uri, EndPointInfo endPointInfo)
 		{

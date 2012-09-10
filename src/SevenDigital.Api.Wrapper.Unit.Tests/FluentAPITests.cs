@@ -25,12 +25,12 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		public void Should_fire_requestcoordinator_with_correct_endpoint_on_resolve()
 		{
 			var requestCoordinator = A.Fake<IRequestCoordinator>();
-            A.CallTo(() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.Ignored)).Returns(stubResponse);
+			A.CallTo(() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.Ignored)).Returns(stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).Please();
 
 			Expression<Func<Response>> callWithEndpointStatus =
-                () => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.That.Matches(x => x.UriPath == "status"));
+				() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.That.Matches(x => x.UriPath == "status"));
 
 			A.CallTo(callWithEndpointStatus).MustHaveHappened(Repeated.Exactly.Once);
 		}
@@ -53,12 +53,12 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		public void Should_fire_requestcoordinator_with_correct_parameters_on_resolve()
 		{
 			var requestCoordinator = A.Fake<IRequestCoordinator>();
-            A.CallTo(() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.Ignored)).Returns(stubResponse);
+			A.CallTo(() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.Ignored)).Returns(stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).WithParameter("artistId", "123").Please();
 
 			Expression<Func<Response>> callWithArtistId123 =
-                () => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.That.Matches(x => x.Parameters["artistId"] == "123"));
+				() => requestCoordinator.HitEndpointAsync(A<EndPointInfo>.That.Matches(x => x.Parameters["artistId"] == "123"));
 
 			A.CallTo(callWithArtistId123).MustHaveHappened();
 
@@ -74,20 +74,20 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 			Assert.That(fakeRequestCoordinator.HttpClient, Is.EqualTo(fakeHttpClient));
 		}
 
-        [Test]
-        public async void should_put_payload_in_action_result()
-        {
-            var requestCoordinator = new FakeRequestCoordinator { StubPayload = stubResponse };
+		[Test]
+		public async void should_put_payload_in_action_result()
+		{
+			var requestCoordinator = new FakeRequestCoordinator { StubPayload = stubResponse };
 
-            var status = await new FluentApi<Status>(requestCoordinator)
-                .PleaseAsync();
+			var status = await new FluentApi<Status>(requestCoordinator)
+				.PleaseAsync();
 
-            Assert.That(status, Is.Not.Null);
-        }
+			Assert.That(status, Is.Not.Null);
+		}
 
 		public class FakeRequestCoordinator : IRequestCoordinator
 		{
-            public async Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
+			public async Task<HttpResponseMessage> HitEndpointAsync(EndPointInfo endPointInfo)
 			{
 				throw new NotImplementedException();
 			}

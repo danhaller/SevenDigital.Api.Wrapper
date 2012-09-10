@@ -26,9 +26,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		}
 
 		[Test]
-        public async void Can_retrieve_that_basket()
+		public async void Can_retrieve_that_basket()
 		{
-            Basket basket = await Api<Basket>.Create
+			Basket basket = await Api<Basket>.Create
 				.WithParameter("basketId", _basketId)
 				.PleaseAsync();
 
@@ -37,9 +37,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		}
 
 		[Test]
-        public async void Can_add_and_remove_release_to_that_basket()
+		public async void Can_add_and_remove_release_to_that_basket()
 		{
-            Basket basket = await Api<Basket>.Create
+			Basket basket = await Api<Basket>.Create
 				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID)
 				.PleaseAsync();
 
@@ -49,7 +49,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 			Assert.That(basket.BasketItems.Items.FirstOrDefault().ReleaseId, Is.EqualTo(EXPECTED_RELEASE_ID.ToString()));
 
 			int toRemove = basket.BasketItems.Items.FirstOrDefault().Id;
-            basket = await Api<Basket>.Create
+			basket = await Api<Basket>.Create
 				.RemoveItem(new Guid(_basketId), toRemove) 
 				.PleaseAsync();
 
@@ -59,18 +59,18 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		}
 
 		[Test]
-        public async void Can_add_and_remove_track_to_that_basket()
+		public async void Can_add_and_remove_track_to_that_basket()
 		{
-            Basket basket = await Api<Basket>.Create
-                .AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID, EXPECTED_TRACK_ID)
-                .PleaseAsync();
+			Basket basket = await Api<Basket>.Create
+				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID, EXPECTED_TRACK_ID)
+				.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);Assert.That(basket.Id, Is.EqualTo(_basketId));
 			Assert.That(basket.BasketItems.Items.Count, Is.GreaterThan(0));
 			Assert.That(basket.BasketItems.Items.FirstOrDefault().TrackId, Is.EqualTo(EXPECTED_TRACK_ID.ToString()));
 
 			int toRemove = basket.BasketItems.Items.FirstOrDefault().Id;
-            basket = await new FluentApi<Basket>()
+			basket = await new FluentApi<Basket>()
 				.RemoveItem(new Guid(_basketId), toRemove) 
 				.PleaseAsync();
 
@@ -80,7 +80,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		}
 
 		[Test]
-        public async void Should_show_amount_due()
+		public async void Should_show_amount_due()
 		{
 			Basket basket = await Api<Basket>.Create
 				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID)

@@ -7,7 +7,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TrackEndpoint
 	public class TrackDetailsTests
 	{
 		[Test]
-        public async void Can_hit_endpoint()
+		public async void Can_hit_endpoint()
 		{
 			Track track = await Api<Track>.Create
 				.ForTrackId(12345)

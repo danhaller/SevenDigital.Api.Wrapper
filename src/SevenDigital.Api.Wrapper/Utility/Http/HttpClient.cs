@@ -6,38 +6,38 @@ using SevenDigital.Api.Wrapper.EndpointResolution;
 
 namespace SevenDigital.Api.Wrapper.Utility.Http
 {
-    public class HttpClient : IHttpClient
+	public class HttpClient : IHttpClient
 	{
-        public async Task<HttpResponseMessage> GetAsync(GetRequest request)
-        {
-            var httpClient = MakeHttpClient(request.Headers);
-            return await httpClient.GetAsync(request.Url);
-        }
-
-        public async Task<HttpResponseMessage> PostAsync(PostRequest request)
+		public async Task<HttpResponseMessage> GetAsync(GetRequest request)
 		{
-            var httpClient = MakeHttpClient(request.Headers);
+			var httpClient = MakeHttpClient(request.Headers);
+			return await httpClient.GetAsync(request.Url);
+		}
 
-            string postData = request.Parameters.ToQueryString();
-            HttpContent content = new StringContent(postData);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+		public async Task<HttpResponseMessage> PostAsync(PostRequest request)
+		{
+			var httpClient = MakeHttpClient(request.Headers);
 
-            return await httpClient.PostAsync(request.Url, content);
-        }
+			string postData = request.Parameters.ToQueryString();
+			HttpContent content = new StringContent(postData);
+			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-        private System.Net.Http.HttpClient MakeHttpClient(IDictionary<string, string> headers)
-        {
-	        var httpClient = new System.Net.Http.HttpClient();
+			return await httpClient.PostAsync(request.Url, content);
+		}
 
-            foreach (var header in headers)
-            {
-                httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
-            }
+		private System.Net.Http.HttpClient MakeHttpClient(IDictionary<string, string> headers)
+		{
+			var httpClient = new System.Net.Http.HttpClient();
 
-	        var productInfo = new ProductInfoHeaderValue("7digital .Net Api Wrapper", "4.5");
-            httpClient.DefaultRequestHeaders.UserAgent.Add(productInfo);
+			foreach (var header in headers)
+			{
+				httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+			}
 
-            return httpClient;
-        }
+			var productInfo = new ProductInfoHeaderValue("7digital .Net Api Wrapper", "4.5");
+			httpClient.DefaultRequestHeaders.UserAgent.Add(productInfo);
+
+			return httpClient;
+		}
 	}
 }

@@ -21,7 +21,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		}
 
 		[Test]
-        public async void Can_hit_endpoint_with_paging()
+		public async void Can_hit_endpoint_with_paging()
 		{
 			ReleaseByDate artistBrowse = await Api<ReleaseByDate>.Create
 				.WithParameter("fromDate", "20090610")

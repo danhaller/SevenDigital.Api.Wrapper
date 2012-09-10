@@ -14,7 +14,7 @@ using HttpClient = SevenDigital.Api.Wrapper.Utility.Http.HttpClient;
 
 namespace SevenDigital.Api.Wrapper
 {
-    public class FluentApi<T> : IFluentApi<T> where T : class
+	public class FluentApi<T> : IFluentApi<T> where T : class
 	{
 		private readonly EndPointInfo _endPointInfo = new EndPointInfo();
 		private readonly IRequestCoordinator _requestCoordinator;
@@ -123,18 +123,18 @@ namespace SevenDigital.Api.Wrapper
 		public virtual async Task<T> PleaseAsync()
 		{
 		   var httpResponse = await	_requestCoordinator.HitEndpointAsync(_endPointInfo);
-           var response = await MakeResponse(httpResponse);
+		   var response = await MakeResponse(httpResponse);
 		   return _deserializer.Deserialize(response);
 		}
 
-        private async Task<Response> MakeResponse(HttpResponseMessage httpResponse)
-        {
-            string responseBody = await httpResponse.Content.ReadAsStringAsync();
-            var headers = HttpHelpers.MapHeaders(httpResponse.Headers);
-            Response response = new Response(httpResponse.StatusCode, headers, responseBody);
-            return response;
-        }
+		private async Task<Response> MakeResponse(HttpResponseMessage httpResponse)
+		{
+			string responseBody = await httpResponse.Content.ReadAsStringAsync();
+			var headers = HttpHelpers.MapHeaders(httpResponse.Headers);
+			Response response = new Response(httpResponse.StatusCode, headers, responseBody);
+			return response;
+		}
 
-        public IDictionary<string, string> Parameters { get { return _endPointInfo.Parameters; } }
+		public IDictionary<string, string> Parameters { get { return _endPointInfo.Parameters; } }
 	}
 }

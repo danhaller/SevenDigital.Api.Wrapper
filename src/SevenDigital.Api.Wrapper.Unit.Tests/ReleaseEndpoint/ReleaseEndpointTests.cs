@@ -19,7 +19,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.ReleaseEndpoint
 			var responseXml = File.ReadAllText("StubResponses/ArtistReleases.xml");
 			var response = new Response(HttpStatusCode.OK, responseXml);
 
-            var xmlSerializer = new ResponseDeserializer<ArtistReleases>();
+			var xmlSerializer = new ResponseDeserializer<ArtistReleases>();
 			var release =  xmlSerializer.Deserialize(response).Releases.First();
 
 			Assert.That(release.Type,Is.EqualTo(ReleaseType.Unknown));

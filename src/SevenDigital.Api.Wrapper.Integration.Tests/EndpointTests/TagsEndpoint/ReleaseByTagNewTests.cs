@@ -9,7 +9,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 	public class ReleaseByTagNewTests
 	{
 		[Test]
-        public async void Can_hit_endpoint()
+		public async void Can_hit_endpoint()
 		{
 
 			ReleaseByTagNew tags = await Api<ReleaseByTagNew>.Create
@@ -23,7 +23,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 		}
 
 		[Test]
-        public async void Can_hit_endpoint_with_paging()
+		public async void Can_hit_endpoint_with_paging()
 		{
 
 			ReleaseByTagNew artistBrowse = await Api<ReleaseByTagNew>.Create

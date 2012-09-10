@@ -22,9 +22,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		}
 
 		[Test]
-        public async void can_determine_if_a_track_is_free()
+		public async void can_determine_if_a_track_is_free()
 		{
-            var releaseTracks = await Api<ReleaseTracks>.Create
+			var releaseTracks = await Api<ReleaseTracks>.Create
 				.ForReleaseId(394123)
 				.PleaseAsync();
 
@@ -34,7 +34,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		}
 
 		[Test]
-        public async void can_determine_if_a_track_is_available_separately()
+		public async void can_determine_if_a_track_is_available_separately()
 		{
 
 			var releaseTracks = await Api<ReleaseTracks>.Create

@@ -27,7 +27,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		}
 
 		[Test]
-        public async void Can_hit_endpoint_with_paging()
+		public async void Can_hit_endpoint_with_paging()
 		{
 			ReleaseChart artistBrowse = await Api<ReleaseChart>.Create
 				.WithParameter("fromDate", "20090610")
@@ -42,7 +42,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		}
 
 		[Test]
-        public async void Can_hit_fluent_endpoint() 
+		public async void Can_hit_fluent_endpoint() 
 		{
 			var release = await Api<ReleaseChart>
 							.Create

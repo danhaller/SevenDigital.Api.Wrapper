@@ -10,7 +10,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 		[Test]
 		public async void Can_hit_endpoint()
 		{
-            ReleaseTags tags = await Api<ReleaseTags>.Create
+			ReleaseTags tags = await Api<ReleaseTags>.Create
 				.WithParameter("releaseid", "155408")
 				.PleaseAsync();
 
@@ -22,9 +22,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 		}
 
 		[Test]
-        public async void Can_hit_endpoint_with_paging()
+		public async void Can_hit_endpoint_with_paging()
 		{
-            ReleaseTags artistBrowse = await Api<ReleaseTags>.Create
+			ReleaseTags artistBrowse = await Api<ReleaseTags>.Create
 				.WithParameter("releaseid", "155408")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "1")
