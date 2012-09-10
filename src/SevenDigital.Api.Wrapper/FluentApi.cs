@@ -7,20 +7,18 @@ using SevenDigital.Api.Schema.OAuth;
 using SevenDigital.Api.Wrapper.EndpointResolution;
 using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 using SevenDigital.Api.Schema.Attributes;
-using SevenDigital.Api.Wrapper.Utility.Http;
-using SevenDigital.Api.Wrapper.Utility.Serialization;
-
-using HttpClient = SevenDigital.Api.Wrapper.Utility.Http.HttpClient;
+using SevenDigital.Api.Wrapper.Http;
+using SevenDigital.Api.Wrapper.Serialization;
 
 namespace SevenDigital.Api.Wrapper
 {
 	public class FluentApi<T> : IFluentApi<T> where T : class
 	{
-		private readonly EndPointInfo _endPointInfo = new EndPointInfo();
-		private readonly IRequestCoordinator _requestCoordinator;
+        private readonly RequestData _requestData = new RequestData();
+        private readonly IHttpRequestor _requestCoordinator;
 		private readonly IResponseDeserializer<T> _deserializer;
 
-		public FluentApi(IRequestCoordinator requestCoordinator)
+        public FluentApi(IHttpRequestor requestCoordinator)
 		{
 			_requestCoordinator = requestCoordinator;
 
@@ -35,7 +33,7 @@ namespace SevenDigital.Api.Wrapper
 				throw new ArgumentException(string.Format("The Type {0} cannot be used in this way, it has no ApiEndpointAttribute", typeof(T)));
 			}
 
-			_endPointInfo.UriPath = attribute.EndpointUri;
+			_requestData.UriPath = attribute.EndpointUri;
 
 
 			OAuthSignedAttribute isSigned = typeof(T).GetCustomAttributes(true)
@@ -44,7 +42,7 @@ namespace SevenDigital.Api.Wrapper
 
 			if (isSigned != null)
 			{
-				_endPointInfo.IsSigned = true;
+				_requestData.IsSigned = true;
 			}
 
 			RequireSecureAttribute isSecure = typeof(T).GetCustomAttributes(true)
@@ -53,7 +51,7 @@ namespace SevenDigital.Api.Wrapper
 
 			if (isSecure != null)
 			{
-				_endPointInfo.UseHttps = true;
+				_requestData.UseHttps = true;
 			}
 
 			HttpPostAttribute isHttpPost = typeof(T).GetCustomAttributes(true)
@@ -62,50 +60,50 @@ namespace SevenDigital.Api.Wrapper
 
 			if (isHttpPost != null)
 			{
-				_endPointInfo.HttpMethod = "POST";
+                _requestData.HttpMethod = HttpMethod.Post;
 			}
 		}
 
 		public FluentApi(IOAuthCredentials oAuthCredentials, IApiUri apiUri)
-			: this(new RequestCoordinator(new HttpClient(), new UrlSigner(), oAuthCredentials, apiUri)) { }
+            : this(new HttpRequestor(new HttpClientWrapper(), new UrlSigner(), oAuthCredentials, apiUri)) { }
 
 		public FluentApi()
-			: this(new RequestCoordinator(new HttpClient(), new UrlSigner(), EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance)) { }
+            : this(new HttpRequestor(new HttpClientWrapper(), new UrlSigner(), EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance)) { }
 
 		public IFluentApi<T> WithEndpoint(string endpoint)
 		{
-			_endPointInfo.UriPath = endpoint;
+			_requestData.UriPath = endpoint;
 			return this;
 		}
 
-		public IFluentApi<T> UsingClient(IHttpClient httpClient)
+		public IFluentApi<T> UsingClient(IHttpClientWrapper httpClient)
 		{
 			_requestCoordinator.HttpClient = httpClient;
 			return this;
 		}
 
-		public virtual IFluentApi<T> WithMethod(string methodName)
+		public virtual IFluentApi<T> WithMethod(HttpMethod method)
 		{
-			_endPointInfo.HttpMethod = methodName;
+            _requestData.HttpMethod = method;
 			return this;
 		}
 
 		public virtual IFluentApi<T> WithParameter(string parameterName, string parameterValue)
 		{
-			_endPointInfo.Parameters[parameterName] = parameterValue;
+			_requestData.Parameters[parameterName] = parameterValue;
 			return this;
 		}
 
 		public virtual IFluentApi<T> ClearParameters()
 		{
-			_endPointInfo.Parameters.Clear();
+			_requestData.Parameters.Clear();
 			return this;
 		}
 
 		public virtual IFluentApi<T> ForUser(string token, string secret)
 		{
-			_endPointInfo.UserToken = token;
-			_endPointInfo.UserSecret = secret;
+			_requestData.UserToken = token;
+			_requestData.UserSecret = secret;
 			return this;
 		}
 
@@ -117,24 +115,16 @@ namespace SevenDigital.Api.Wrapper
 
 		public virtual string EndpointUrl
 		{
-			get { return _requestCoordinator.ConstructEndpoint(_endPointInfo); }
+            get { return _requestCoordinator.EndpointUrl(_requestData); }
 		}
 
 		public virtual async Task<T> PleaseAsync()
 		{
-		   var httpResponse = await	_requestCoordinator.HitEndpointAsync(_endPointInfo);
-		   var response = await MakeResponse(httpResponse);
-		   return _deserializer.Deserialize(response);
+            var response = await _requestCoordinator.GetDataAsync(_requestData);
+		    return _deserializer.Deserialize(response);
 		}
 
-		private async Task<Response> MakeResponse(HttpResponseMessage httpResponse)
-		{
-			string responseBody = await httpResponse.Content.ReadAsStringAsync();
-			var headers = HttpHelpers.MapHeaders(httpResponse.Headers);
-			Response response = new Response(httpResponse.StatusCode, headers, responseBody);
-			return response;
-		}
 
-		public IDictionary<string, string> Parameters { get { return _endPointInfo.Parameters; } }
+		public IDictionary<string, string> Parameters { get { return _requestData.Parameters; } }
 	}
 }

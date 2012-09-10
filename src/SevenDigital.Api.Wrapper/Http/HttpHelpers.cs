@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http.Headers;
 
-namespace SevenDigital.Api.Wrapper.Utility.Http
+namespace SevenDigital.Api.Wrapper.Http
 {
 	public static class HttpHelpers
 	{

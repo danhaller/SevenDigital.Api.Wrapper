@@ -5,8 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using NUnit.Framework;
-using SevenDigital.Api.Wrapper.Utility.Http;
-using HttpClient = SevenDigital.Api.Wrapper.Utility.Http.HttpClient;
+using SevenDigital.Api.Wrapper.Http;
 
 namespace SevenDigital.Api.Wrapper.Integration.Tests.Utility.Http
 {

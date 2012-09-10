@@ -5,8 +5,8 @@ using System.Xml.Linq;
 using NUnit.Framework;
 using SevenDigital.Api.Schema.ArtistEndpoint;
 using SevenDigital.Api.Schema.ReleaseEndpoint;
-using SevenDigital.Api.Wrapper.Utility.Http;
-using SevenDigital.Api.Wrapper.Utility.Serialization;
+using SevenDigital.Api.Wrapper.Http;
+using SevenDigital.Api.Wrapper.Serialization;
 
 namespace SevenDigital.Api.Wrapper.Unit.Tests.ReleaseEndpoint
 {
