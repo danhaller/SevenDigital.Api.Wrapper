@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace SevenDigital.Api.Wrapper.Http
 {
-    [Serializable]
+	[Serializable]
 	public class RequestData
 	{
 		public string UriPath { get; set; }

@@ -14,11 +14,11 @@ namespace SevenDigital.Api.Wrapper
 {
 	public class FluentApi<T> : IFluentApi<T> where T : class
 	{
-        private readonly RequestData _requestData = new RequestData();
-        private readonly IHttpRequestor _requestCoordinator;
+		private readonly RequestData _requestData = new RequestData();
+		private readonly IHttpRequestor _requestCoordinator;
 		private readonly IResponseDeserializer<T> _deserializer;
 
-        public FluentApi(IHttpRequestor requestCoordinator)
+		public FluentApi(IHttpRequestor requestCoordinator)
 		{
 			_requestCoordinator = requestCoordinator;
 
@@ -60,15 +60,15 @@ namespace SevenDigital.Api.Wrapper
 
 			if (isHttpPost != null)
 			{
-                _requestData.HttpMethod = HttpMethod.Post;
+				_requestData.HttpMethod = HttpMethod.Post;
 			}
 		}
 
 		public FluentApi(IOAuthCredentials oAuthCredentials, IApiUri apiUri)
-            : this(new HttpRequestor(new HttpClientWrapper(), new UrlSigner(), oAuthCredentials, apiUri)) { }
+			: this(new HttpRequestor(new HttpClientWrapper(), new UrlSigner(), oAuthCredentials, apiUri)) { }
 
 		public FluentApi()
-            : this(new HttpRequestor(new HttpClientWrapper(), new UrlSigner(), EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance)) { }
+			: this(new HttpRequestor(new HttpClientWrapper(), new UrlSigner(), EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance)) { }
 
 		public IFluentApi<T> WithEndpoint(string endpoint)
 		{
@@ -84,7 +84,7 @@ namespace SevenDigital.Api.Wrapper
 
 		public virtual IFluentApi<T> WithMethod(HttpMethod method)
 		{
-            _requestData.HttpMethod = method;
+			_requestData.HttpMethod = method;
 			return this;
 		}
 
@@ -115,13 +115,13 @@ namespace SevenDigital.Api.Wrapper
 
 		public virtual string EndpointUrl
 		{
-            get { return _requestCoordinator.EndpointUrl(_requestData); }
+			get { return _requestCoordinator.EndpointUrl(_requestData); }
 		}
 
 		public virtual async Task<T> PleaseAsync()
 		{
-            var response = await _requestCoordinator.GetDataAsync(_requestData);
-		    return _deserializer.Deserialize(response);
+			var response = await _requestCoordinator.GetDataAsync(_requestData);
+			return _deserializer.Deserialize(response);
 		}
 
 
