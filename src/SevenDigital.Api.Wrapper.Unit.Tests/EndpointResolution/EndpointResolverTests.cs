@@ -10,25 +10,25 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 	[TestFixture]
 	public class EndpointResolverTests
 	{
-		private RequestCoordinator _requestCoordinator;
+        private IHttpRequestor _requestCoordinator;
 
 		[SetUp]
 		public void Setup()
 		{
-			var httpClient = A.Fake<IHttpClient>();
-			A.CallTo(() => httpClient.GetAsync(A<GetRequest>.Ignored)).Returns(new Response());
+			var httpClient = A.Fake<IHttpClientWrapper>();
+            A.CallTo(() => httpClient.GetAsync(A<RequestData>.Ignored)).Returns(new Response());
 
 			var apiUri = A.Fake<IApiUri>();
 			A.CallTo(() => apiUri.Uri)
 				.Returns("http://uri/");
 
-			_requestCoordinator = new RequestCoordinator(httpClient, new UrlSigner(), new AppSettingsCredentials(), apiUri);
+			_requestCoordinator = new HttpRequestor(httpClient, new UrlSigner(), new AppSettingsCredentials(), apiUri);
 		}
 
 		[Test]
 		public void should_substitue_route_parameters()
 		{
-			var endpointInfo = new EndPointInfo
+            var endpointInfo = new RequestData
 			{
 				UriPath = "something/{route}",
 				Parameters = new Dictionary<string, string>
@@ -37,7 +37,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 						}
 			};
 
-			var result = _requestCoordinator.ConstructEndpoint(endpointInfo);
+			var result = _requestCoordinator.EndpointUrl(endpointInfo);
 
 			Assert.That(result,Is.StringContaining("something/routevalue"));
 		}
@@ -45,7 +45,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 		[Test]
 		public void should_substitue_multiple_route_parameters()
 		{
-			var endpointInfo = new EndPointInfo
+            var endpointInfo = new RequestData
 			{
 				UriPath = "something/{firstRoute}/{secondRoute}/thrid/{thirdRoute}",
 				Parameters = new Dictionary<string, string>
@@ -57,7 +57,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 						}
 			};
 
-			var result = _requestCoordinator.ConstructEndpoint(endpointInfo);
+            var result = _requestCoordinator.EndpointUrl(endpointInfo);
 
 			Assert.That(result, Is.StringContaining("something/firstvalue/secondvalue/thrid/thirdvalue"));
 		}
@@ -65,7 +65,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 		[Test]
 		public void routes_should_be_case_insensitive()
 		{
-			var endpointInfo = new EndPointInfo
+            var endpointInfo = new RequestData
 			{
 				UriPath = "something/{firstRoUte}/{secOndrouTe}/thrid/{tHirdRoute}",
 				Parameters = new Dictionary<string, string>
@@ -77,7 +77,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 						}
 			};
 
-			var result = _requestCoordinator.ConstructEndpoint(endpointInfo);
+            var result = _requestCoordinator.EndpointUrl(endpointInfo);
 
 			Assert.That(result, Is.StringContaining("something/firstvalue/secondvalue/thrid/thirdvalue"));
 		}
@@ -85,7 +85,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 		[Test]
 		public void should_handle_dashes_and_numbers()
 		{
-			var endpointInfo = new EndPointInfo
+            var endpointInfo = new RequestData
 			{
 				UriPath = "something/{route-66}",
 				Parameters = new Dictionary<string, string>
@@ -94,7 +94,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 						}
 			};
 
-			var result = _requestCoordinator.ConstructEndpoint(endpointInfo);
+            var result = _requestCoordinator.EndpointUrl(endpointInfo);
 
 			Assert.That(result, Is.StringContaining("something/routevalue"));
 		}
@@ -102,7 +102,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 		[Test]
 		public void should_remove_parameters_that_match()
 		{
-			var endpointInfo = new EndPointInfo
+            var endpointInfo = new RequestData
 			{
 				UriPath = "something/{route-66}",
 				Parameters = new Dictionary<string, string>
@@ -111,7 +111,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.EndpointResolution
 						}
 			};
 
-			var result = _requestCoordinator.ConstructEndpoint(endpointInfo);
+            var result = _requestCoordinator.EndpointUrl(endpointInfo);
 
 			Assert.That(result, Is.Not.StringContaining("route-66=routevalue"));
 		}

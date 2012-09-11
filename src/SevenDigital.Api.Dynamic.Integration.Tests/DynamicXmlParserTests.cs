@@ -13,27 +13,30 @@ namespace SevenDigital.Api.Dynamic.Integration.Tests
 	[TestFixture]
 	public class DynamicXmlParserTests 
 	{
-		private RequestCoordinator _requestCoordinator;
+        private IHttpRequestor _requestCoordinator;
 
 		[SetUp]
 		public void SetUp() 
 		{
 			IOAuthCredentials oAuthCredentials = EssentialDependencyCheck<IOAuthCredentials>.Instance;
 			IApiUri apiUri = EssentialDependencyCheck<IApiUri>.Instance;
-			var httpGetResolver = new HttpClient();
+			var httpGetResolver = new HttpClientWrapper();
 			var urlSigner = new UrlSigner();
 
-			_requestCoordinator = new RequestCoordinator(httpGetResolver, urlSigner, oAuthCredentials, apiUri);
+            _requestCoordinator = new HttpRequestor(httpGetResolver, urlSigner, oAuthCredentials, apiUri);
 		}
 
 		[Test]
-		public void Can_get_an_artist() 
+		public async void Can_get_an_artist() 
 		{
 			const string endpoint = "artist/details";
 
-			var endPointInfo = new EndPointInfo { UriPath = endpoint, Parameters = new Dictionary<string,string> { { "artistId", "1" } } };
+            var endPointInfo = new RequestData 
+                { 
+                    UriPath = endpoint, 
+                    Parameters = new Dictionary<string, string> { { "artistId", "1" } } };
 
-			var response = _requestCoordinator.HitEndpoint(endPointInfo);
+			var response = await _requestCoordinator.GetDataAsync(endPointInfo);
 
 			dynamic dx = new DynamicXmlParser(XDocument.Parse(response.Body));
 
@@ -47,11 +50,11 @@ namespace SevenDigital.Api.Dynamic.Integration.Tests
 		}
 
 		[Test]
-		public void Can_get_an_artists_releases() 
+		public async void Can_get_an_artists_releases() 
 		{
 			const string endpoint = "artist/releases";
 
-			var endPointInfo = new EndPointInfo
+            var endPointInfo = new RequestData
 				{
 					UriPath = endpoint, 
 					Parameters =  new Dictionary<string,string>
@@ -61,11 +64,13 @@ namespace SevenDigital.Api.Dynamic.Integration.Tests
 						}
 				};
 
-			var response = _requestCoordinator.HitEndpoint(endPointInfo);
+			var response = await _requestCoordinator.GetDataAsync(endPointInfo);
 
 			dynamic dx = new DynamicXmlParser(XDocument.Parse(response.Body));
 			
-			string [] titles = Enumerable.ToArray(Enumerable.Select<dynamic, string>(dx.releases.release, (Func<dynamic, string>) (r => r.title.value)));
+			string [] titles = Enumerable.ToArray(
+                    Enumerable.Select<dynamic, string>(dx.releases.release, 
+                        (Func<dynamic, string>) (r => r.title.value)));
 
 			foreach (var title in titles) 
 			{

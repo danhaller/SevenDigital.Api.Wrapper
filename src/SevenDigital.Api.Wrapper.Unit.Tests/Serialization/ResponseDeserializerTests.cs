@@ -5,7 +5,7 @@ using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Wrapper.Http;
 using SevenDigital.Api.Wrapper.Serialization;
 
-namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
+namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 {
 	[TestFixture]
 	public class ResponseDeserializerTests
@@ -16,11 +16,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 			//success case with well formed response
 			const string xml = "<?xml version=\"1.0\"?><response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" status=\"ok\"><testObject id=\"1\"> <name>A big test object</name><listOfThings><string>one</string><string>two</string><string>three</string></listOfThings><listOfInnerObjects><InnerObject id=\"1\"><Name>Trevor</Name></InnerObject><InnerObject id=\"2\"><Name>Bill</Name></InnerObject></listOfInnerObjects></testObject></response>";
 
-			var stubResponse = new Response
-				{
-					StatusCode = HttpStatusCode.OK,
-					Body = xml
-				};
+			var stubResponse = new Response(HttpStatusCode.OK, xml);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -35,11 +31,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		public void Can_deserialize_server_error()
 		{
 			const string errorXml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"error\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\" ><error code=\"1001\"><errorMessage>Test error</errorMessage></error></response>";
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.InternalServerError,
-					Body = errorXml
-				};
+			var response = new Response(HttpStatusCode.InternalServerError, errorXml);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -57,11 +49,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		public void Can_deserialize_well_formed_error()
 		{
 			const string errorXml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"error\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\" ><error code=\"1001\"><errorMessage>Test error</errorMessage></error></response>";
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.OK,
-					Body = errorXml
-				};
+			var response = new Response(HttpStatusCode.OK, errorXml);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -79,11 +67,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		public void Should_not_fail_if_xml_is_a_malformed_api_error()
 		{
 			const string badError = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"error\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\" ><error><errorme></errorme></error></response>";
-			var response = new Response
-			{
-				StatusCode = HttpStatusCode.OK,
-				Body = badError
-			};
+			var response = new Response(HttpStatusCode.OK, badError);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -97,11 +81,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		public void Should_not_fail_if_xml_is_missing_error_code()
 		{
 			const string validXml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"error\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\" ><error><errorMessage>An error</errorMessage></error></response>";
-			var response = new Response
-			{
-				StatusCode = HttpStatusCode.OK,
-				Body = validXml
-			};
+			var response = new Response(HttpStatusCode.OK, validXml);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -114,11 +94,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		public void Should_not_fail_if_xml_is_missing_error_message()
 		{
 			const string validXml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"error\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\" ><error code=\"123\"></error></response>";
-			var response = new Response
-			{
-				StatusCode = HttpStatusCode.OK,
-				Body = validXml
-			};
+			var response = new Response( HttpStatusCode.OK, validXml);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -141,11 +117,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		{
 			const string badXml = "<html><head>Error</head><body>It did not work<br><hr></body></html>";
 
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.InternalServerError,
-					Body = badXml
-				};
+			var response = new Response(HttpStatusCode.InternalServerError, badXml);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -162,11 +134,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		{
 			const string badXml = "<html><head>Error</head><body>Some random html page<br><hr></body></html>";
 
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.OK,
-					Body = badXml
-				};
+			var response = new Response( HttpStatusCode.OK, badXml);
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 
@@ -181,11 +149,8 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		[Test]
 		public void Should_handle_plaintext_OauthFail()
 		{
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.Unauthorized,
-					Body = "OAuth authentication error: Not authorised - no user credentials provided"
-				};
+			var response = new Response( HttpStatusCode.Unauthorized, 
+                "OAuth authentication error: Not authorised - no user credentials provided");
 
 			var xmlSerializer = new ResponseDeserializer<TestObject>();
 			var ex = Assert.Throws<ApiXmlException>(() => xmlSerializer.Deserialize(response));
@@ -203,11 +168,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		public void should_throw_exception_when_deserialize_with_invalid_status()
 		{
 			const string InvalidStatusXmlResponse = "<?xml version=\"1.0\"?><response status=\"fish\" version=\"1.2\"></response>";
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.OK,
-					Body = InvalidStatusXmlResponse
-				};
+			var response = new Response(HttpStatusCode.OK, InvalidStatusXmlResponse);
 			var deserializer = new ResponseDeserializer<TestEmptyObject>();
 
 			var ex = Assert.Throws<ApiXmlException>(() => deserializer.Deserialize(response));
@@ -221,11 +182,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		public void should_throw_exception_when_deserialize_with_missing_status()
 		{
 			const string MissingStatusXmlResponse = "<?xml version=\"1.0\"?><response version=\"1.2\"></response>";
-			var response = new Response
-				{
-					StatusCode = HttpStatusCode.OK,
-					Body = MissingStatusXmlResponse
-				};
+			var response = new Response(HttpStatusCode.OK, MissingStatusXmlResponse);
 			var deserializer = new ResponseDeserializer<TestEmptyObject>();
 
 			var ex = Assert.Throws<ApiXmlException>(() => deserializer.Deserialize(response));
