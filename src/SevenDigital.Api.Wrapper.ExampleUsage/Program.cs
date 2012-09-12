@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using SevenDigital.Api.Schema.ReleaseEndpoint;
 using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Schema.ArtistEndpoint;
@@ -12,13 +13,22 @@ namespace SevenDigital.Api.Wrapper.ExampleUsage
 		static void Main(string[] args) 
 		{
 			string s = args[0];
+			int artistId = Convert.ToInt32(s);
 
 			var appSettingsCredentials = new AppSettingsCredentials();
 			Console.WriteLine("Using creds: {0} - {1}", appSettingsCredentials.ConsumerKey, appSettingsCredentials.ConsumerSecret);
 
+			var task = AsyncWork(artistId);
+			task.Wait();
+
+			Console.ReadKey();
+		}
+
+		private static async Task AsyncWork(int artistId)
+		{
 			// -- artist/details
 			var artist = await Api<Artist>.Create
-				.WithArtistId(Convert.ToInt32(s))
+				.WithArtistId(artistId)
 				.PleaseAsync();
 
 			Console.WriteLine("Artist \"{0}\" selected", artist.Name);
@@ -29,40 +39,40 @@ namespace SevenDigital.Api.Wrapper.ExampleUsage
 			// -- artist/toptracks
 			var artistTopTracks = await Api<ArtistTopTracks>
 				.Create
-				.WithArtistId(Convert.ToInt32(s))
+				.WithArtistId(Convert.ToInt32(artistId))
 				.PleaseAsync();
 
 			Console.WriteLine("Top Track: {0}", artistTopTracks.Tracks.FirstOrDefault().Title);
 			Console.WriteLine();
-			
+
 			// -- artist/browse
-			const string searchValue = "Radio";
+			const string SearchValue = "Radio";
 			var artistBrowse = await Api<ArtistBrowse>
 				.Create
-				.WithLetter(searchValue)
+				.WithLetter(SearchValue)
 				.PleaseAsync();
 
-			Console.WriteLine("Browse on \"{0}\" returns: {1}", searchValue, artistBrowse.Artists.FirstOrDefault().Name);
+			Console.WriteLine("Browse on \"{0}\" returns: {1}", SearchValue, artistBrowse.Artists.FirstOrDefault().Name);
 			Console.WriteLine();
 
 			// -- artist/search
 			var artistSearch = await Api<ArtistSearch>.Create
-				.WithQuery(searchValue)
+				.WithQuery(SearchValue)
 				.WithPageNumber(1)
 				.WithPageSize(10)
 				.PleaseAsync();
 
-			Console.WriteLine("Artist Search on \"{0}\" returns: {1} items", searchValue, artistSearch.TotalItems);
+			Console.WriteLine("Artist Search on \"{0}\" returns: {1} items", SearchValue, artistSearch.TotalItems);
 			Console.WriteLine();
 
 			// -- release/search
 			var releaseSearch = await Api<ReleaseSearch>.Create
-				.WithQuery(searchValue)
+				.WithQuery(SearchValue)
 				.WithPageNumber(1)
 				.WithPageSize(10)
 				.PleaseAsync();
 
-			Console.WriteLine("Release search on \"{0}\" returns: {1} items", searchValue, releaseSearch.TotalItems);
+			Console.WriteLine("Release search on \"{0}\" returns: {1} items", SearchValue, releaseSearch.TotalItems);
 			Console.WriteLine();
 
 			// -- Debug uri
@@ -71,7 +81,7 @@ namespace SevenDigital.Api.Wrapper.ExampleUsage
 
 			// -- async get (async post not implemented yet)
 			var result = await Api<ReleaseSearch>.Create
-				.WithQuery(searchValue)
+				.WithQuery(SearchValue)
 				.WithPageNumber(1)
 				.WithPageSize(10)
 				.PleaseAsync();
@@ -79,29 +89,27 @@ namespace SevenDigital.Api.Wrapper.ExampleUsage
 			Console.WriteLine("Async Release search on \"{0}\" returns: {1} items", "Radio", result.TotalItems);
 			Console.WriteLine();
 
-			try 
+			try
 			{
 				// -- Deliberate error response
 				Console.WriteLine("Trying artist/details without artistId parameter...");
 				await Api<Artist>.Create.PleaseAsync();
-			} 
-			catch (ApiXmlException ex) 
+			}
+			catch (ApiXmlException ex)
 			{
 				Console.WriteLine("{0} : {1}", ex.Error.Code, ex.Error.ErrorMessage);
 			}
 
-			try 
+			try
 			{
 				// -- Deliberate unauthorized response
 				Console.WriteLine("Trying user/locker without any credentials...");
 				await Api<Locker>.Create.PleaseAsync();
-			} 
-			catch (ApiXmlException ex) 
+			}
+			catch (ApiXmlException ex)
 			{
 				Console.WriteLine("{0} : {1}", ex.Error.Code, ex.Error.ErrorMessage);
 			}
-
-			Console.ReadKey();
 		}
 	}
 }
