@@ -12,7 +12,6 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TrackEndpoint
 		[Test]
 		public async void Can_hit_endpoint()
 		{
-
 			TrackChart release = await Api<TrackChart>.Create
 				.WithParameter("fromDate", "20110101")
 				.WithParameter("toDate", "20110301")
@@ -46,10 +45,10 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TrackEndpoint
 		public async void Can_hit_fluent_endpoint()
 		{
 			var release = await Api<TrackChart>
-							.Create
-							.WithToDate(new DateTime(2011, 01, 31))
-							.WithPeriod(ChartPeriod.Week)
-							.PleaseAsync();
+				.Create
+				.WithToDate(new DateTime(2011, 01, 31))
+				.WithPeriod(ChartPeriod.Week)
+				.PleaseAsync();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.ChartItems.Count, Is.EqualTo(10));

@@ -25,7 +25,6 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 		[Test]
 		public async void Can_hit_endpoint_with_paging()
 		{
-
 			ReleaseByTagNew artistBrowse = await Api<ReleaseByTagNew>.Create
 				.WithParameter("tags", "rock")
 				.WithParameter("page", "2")

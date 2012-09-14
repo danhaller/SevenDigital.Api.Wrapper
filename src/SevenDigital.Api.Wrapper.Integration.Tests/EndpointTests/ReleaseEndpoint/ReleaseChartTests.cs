@@ -45,10 +45,10 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		public async void Can_hit_fluent_endpoint() 
 		{
 			var release = await Api<ReleaseChart>
-							.Create
-							.WithToDate(new DateTime(2011, 01, 31))
-							.WithPeriod(ChartPeriod.Week)
-							.PleaseAsync();
+				.Create
+				.WithToDate(new DateTime(2011, 01, 31))
+				.WithPeriod(ChartPeriod.Week)
+				.PleaseAsync();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.ChartItems.Count, Is.EqualTo(10));

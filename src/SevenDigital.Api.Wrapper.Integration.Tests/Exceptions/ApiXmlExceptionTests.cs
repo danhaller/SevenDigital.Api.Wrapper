@@ -23,11 +23,11 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Exceptions
 		[Test]
 		public void Should_fail_correctly_if_non_xml_error_returned_eg_unauthorised()
 		{
-				// -- Deliberate unauthorized response
-				Console.WriteLine("Trying user/locker without any credentials...");
-				var apiXmlException = Assert.Throws<ApiXmlException>(() => Api<Locker>.Create.PleaseAsync());
-				Assert.That(apiXmlException.Error.Code, Is.EqualTo(9001));
-				Assert.That(apiXmlException.Error.ErrorMessage, Is.EqualTo("OAuth authentication error: Resource requires access token"));
+			// -- Deliberate unauthorized response
+			Console.WriteLine("Trying user/locker without any credentials...");
+			var apiXmlException = Assert.Throws<ApiXmlException>(() => Api<Locker>.Create.PleaseAsync());
+			Assert.That(apiXmlException.Error.Code, Is.EqualTo(9001));
+			Assert.That(apiXmlException.Error.ErrorMessage, Is.EqualTo("OAuth authentication error: Resource requires access token"));
 		}
 	}
 }

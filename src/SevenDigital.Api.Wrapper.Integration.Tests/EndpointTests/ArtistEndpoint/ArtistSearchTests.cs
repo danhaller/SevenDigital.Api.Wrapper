@@ -33,7 +33,6 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		[Test]
 		public async void Can_hit_endpoint_with_fluent_interface()
 		{
-
 			ArtistSearch artistSearch = await Api<ArtistSearch>
 				.Create
 				.WithQuery("pink")
@@ -41,7 +40,6 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 				.PleaseAsync();
 
 			Assert.That(artistSearch, Is.Not.Null);
-			
 		}
 
 		[Test]
@@ -68,18 +66,17 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 				.PleaseAsync();
 
 			Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
-			
 		}
 
 		[Test]
 		public async void Can_get_multiple_results_with_new_FluentApi_overload()
 		{
 			var artistSearch = await new FluentApi<ArtistSearch>(new AppSettingsCredentials(), new ApiUri())
-									.ForShop(34)
-									.WithQuery("pink")
-									.WithPageNumber(1)
-									.WithPageSize(20)
-									.PleaseAsync();
+				.ForShop(34)
+				.WithQuery("pink")
+				.WithPageNumber(1)
+				.WithPageSize(20)
+				.PleaseAsync();
 
 			Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
 		}

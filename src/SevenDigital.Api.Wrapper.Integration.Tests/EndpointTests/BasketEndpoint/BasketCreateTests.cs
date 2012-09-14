@@ -8,9 +8,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 	[TestFixture]
 	public class BasketCreateTests
 	{
-		private const int EXPECTED_RELEASE_ID = 160553;
+		private const int ExpectedReleaseId = 160553;
+		private const int ExpectedTrackId = 1693930;
 		private string _basketId;
-		private const int EXPECTED_TRACK_ID = 1693930;
 		
 		[TestFixtureSetUp]
 		public async void Can_create_basket()
@@ -40,13 +40,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 		public async void Can_add_and_remove_release_to_that_basket()
 		{
 			Basket basket = await Api<Basket>.Create
-				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID)
+				.AddItem(new Guid(_basketId), ExpectedReleaseId)
 				.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);
 			Assert.That(basket.Id, Is.EqualTo(_basketId));
 			Assert.That(basket.BasketItems.Items.Count, Is.GreaterThan(0));
-			Assert.That(basket.BasketItems.Items.FirstOrDefault().ReleaseId, Is.EqualTo(EXPECTED_RELEASE_ID.ToString()));
+			Assert.That(basket.BasketItems.Items.FirstOrDefault().ReleaseId, Is.EqualTo(ExpectedReleaseId.ToString()));
 
 			int toRemove = basket.BasketItems.Items.FirstOrDefault().Id;
 			basket = await Api<Basket>.Create
@@ -55,19 +55,19 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 
 			Assert.That(basket, Is.Not.Null);
 			Assert.That(basket.Id, Is.EqualTo(_basketId));
-			Assert.That(basket.BasketItems.Items.Where(x=>x.Id == toRemove).Count(), Is.EqualTo(0));
+			Assert.That(basket.BasketItems.Items.Count(x => x.Id == toRemove), Is.EqualTo(0));
 		}
 
 		[Test]
 		public async void Can_add_and_remove_track_to_that_basket()
 		{
 			Basket basket = await Api<Basket>.Create
-				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID, EXPECTED_TRACK_ID)
+				.AddItem(new Guid(_basketId), ExpectedReleaseId, ExpectedTrackId)
 				.PleaseAsync();
 
 			Assert.That(basket, Is.Not.Null);Assert.That(basket.Id, Is.EqualTo(_basketId));
 			Assert.That(basket.BasketItems.Items.Count, Is.GreaterThan(0));
-			Assert.That(basket.BasketItems.Items.FirstOrDefault().TrackId, Is.EqualTo(EXPECTED_TRACK_ID.ToString()));
+			Assert.That(basket.BasketItems.Items.FirstOrDefault().TrackId, Is.EqualTo(ExpectedTrackId.ToString()));
 
 			int toRemove = basket.BasketItems.Items.FirstOrDefault().Id;
 			basket = await new FluentApi<Basket>()
@@ -76,14 +76,14 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.BasketEndpoin
 
 			Assert.That(basket, Is.Not.Null);
 			Assert.That(basket.Id, Is.EqualTo(_basketId));
-			Assert.That(basket.BasketItems.Items.Where(x => x.Id == toRemove).Count(), Is.EqualTo(0));
+			Assert.That(basket.BasketItems.Items.Count(x => x.Id == toRemove), Is.EqualTo(0));
 		}
 
 		[Test]
 		public async void Should_show_amount_due()
 		{
 			Basket basket = await Api<Basket>.Create
-				.AddItem(new Guid(_basketId), EXPECTED_RELEASE_ID)
+				.AddItem(new Guid(_basketId), ExpectedReleaseId)
 				.PleaseAsync();
 
 			Assert.That(basket.BasketItems.Items.First().AmountDue.Amount, Is.EqualTo("7.99"));

@@ -17,7 +17,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 			Assert.That(tags, Is.Not.Null);
 			Assert.That(tags.TagList.Count, Is.GreaterThan(0));
 			Assert.That(tags.TagList.FirstOrDefault().Id, Is.Not.Empty);
-			Assert.That(tags.TagList.Where(x => x.Id == "rock").FirstOrDefault().Text, Is.EqualTo("rock"));
+			Assert.That(tags.TagList.FirstOrDefault(x => x.Id == "rock").Text, Is.EqualTo("rock"));
 
 		}
 

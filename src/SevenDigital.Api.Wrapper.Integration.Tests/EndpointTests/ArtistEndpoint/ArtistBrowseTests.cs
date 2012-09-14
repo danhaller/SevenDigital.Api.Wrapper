@@ -22,7 +22,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		[Test]
 		public async void Can_hit_endpoint_with_fluent_interface_with_paging()
 		{
-			var artistBrowse = (ArtistBrowse)await Api<ArtistBrowse>
+			var artistBrowse = await Api<ArtistBrowse>
 				.Create
 				.WithLetter("radio")
 				.WithPageNumber(2)
