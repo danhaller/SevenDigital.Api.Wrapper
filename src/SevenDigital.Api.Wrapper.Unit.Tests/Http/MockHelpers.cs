@@ -36,7 +36,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 				A<string>.That.Matches(y => y.Contains(expected))))
 				.MustHaveHappened(Repeated.Exactly.Once);
 		}
-		public static void MockGetDataAsync(this IHttpRequestor httpClient, Response response)
+		public static void MockGetDataAsync(this IRequestCoordinator httpClient, Response response)
 		{
 			A.CallTo(() => httpClient.GetDataAsync(A<RequestData>.Ignored))
 				.ReturnsLazily(() => Task.Factory.StartNew(() => response));

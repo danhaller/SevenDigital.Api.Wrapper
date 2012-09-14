@@ -2,7 +2,7 @@
 
 namespace SevenDigital.Api.Wrapper.Http
 {
-	public interface IHttpRequestor
+	public interface IRequestCoordinator
 	{
 		Task<Response> GetDataAsync(RequestData requestData);
 		string EndpointUrl(RequestData requestData);

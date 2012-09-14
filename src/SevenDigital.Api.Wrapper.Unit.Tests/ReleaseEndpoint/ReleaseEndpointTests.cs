@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Net;
-using System.Xml.Linq;
 using NUnit.Framework;
 using SevenDigital.Api.Schema.ArtistEndpoint;
 using SevenDigital.Api.Schema.ReleaseEndpoint;

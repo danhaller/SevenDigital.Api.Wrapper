@@ -21,7 +21,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		[Test]
 		public void Should_fire_requestcoordinator_with_correct_endpoint_on_resolve()
 		{
-			var requestCoordinator = A.Fake<IHttpRequestor>();
+			var requestCoordinator = A.Fake<IRequestCoordinator>();
 			requestCoordinator.MockGetDataAsync(stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).PleaseAsync();
@@ -35,7 +35,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		[Test]
 		public void Should_fire_requestcoordinator_with_correct_methodname_on_resolve()
 		{
-			var requestCoordinator = A.Fake<IHttpRequestor>();
+			var requestCoordinator = A.Fake<IRequestCoordinator>();
 			requestCoordinator.MockGetDataAsync(stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).WithMethod(HttpMethod.Post).PleaseAsync();
@@ -49,7 +49,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		[Test]
 		public void Should_fire_requestcoordinator_with_correct_parameters_on_resolve()
 		{
-			var requestCoordinator = A.Fake<IHttpRequestor>();
+			var requestCoordinator = A.Fake<IRequestCoordinator>();
 			requestCoordinator.MockGetDataAsync(stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).WithParameter("artistId", "123").PleaseAsync();
@@ -63,7 +63,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		[Test]
 		public void Should_use_custom_http_client()
 		{
-			var fakeRequestCoordinator = A.Fake<IHttpRequestor>();
+			var fakeRequestCoordinator = A.Fake<IRequestCoordinator>();
 			var fakeHttpClient = new FakeHttpClientWrapper();
 
 			new FluentApi<Status>(fakeRequestCoordinator).UsingClient(fakeHttpClient);
@@ -74,7 +74,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		[Test]
 		public async void should_put_payload_in_action_result()
 		{
-			var requestCoordinator = new FakeHttpRequestor 
+			var requestCoordinator = new FakeRequestCoordinator 
 				{ 
 					FakeResponse = stubResponse 
 				};

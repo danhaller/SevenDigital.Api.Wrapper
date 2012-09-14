@@ -9,14 +9,14 @@ using SevenDigital.Api.Wrapper.EndpointResolution.OAuth;
 
 namespace SevenDigital.Api.Wrapper.Http
 {
-	public class HttpRequestor : IHttpRequestor
+	public class RequestCoordinator : IRequestCoordinator
 	{
 		private IHttpClientWrapper _httpClient;
 		private readonly IUrlSigner _urlSigner;
 		private readonly IOAuthCredentials _oAuthCredentials;
 		private readonly IApiUri _apiUri;
 
-		public HttpRequestor(IHttpClientWrapper httpClient, IUrlSigner urlSigner, IOAuthCredentials oAuthCredentials, IApiUri apiUri)
+		public RequestCoordinator(IHttpClientWrapper httpClient, IUrlSigner urlSigner, IOAuthCredentials oAuthCredentials, IApiUri apiUri)
 		{
 			_httpClient = httpClient;
 			_urlSigner = urlSigner;

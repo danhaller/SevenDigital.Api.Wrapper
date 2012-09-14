@@ -7,7 +7,7 @@ using SevenDigital.Api.Wrapper.Http;
 
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 {
-    public class FakeHttpRequestor : IHttpRequestor
+    public class FakeRequestCoordinator : IRequestCoordinator
     {
 		public async Task<Response> GetDataAsync(RequestData requestData)
 		{

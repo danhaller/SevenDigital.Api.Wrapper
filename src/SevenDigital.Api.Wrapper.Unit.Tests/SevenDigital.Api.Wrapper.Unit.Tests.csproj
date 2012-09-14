@@ -69,13 +69,13 @@
     <Compile Include="EndpointResolution\EndpointResolverTests.cs" />
     <Compile Include="EndpointResolution\OAuth\UrlSignerTests.cs" />
     <Compile Include="FluentAPITests.cs" />
-    <Compile Include="Http\FakeHttpRequestor.cs" />
+    <Compile Include="Http\FakeRequestCoordinator.cs" />
     <Compile Include="Http\MockHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseEndpoint\ReleaseEndpointTests.cs" />
     <Compile Include="Http\FakeHttpClientWrapper.cs" />
     <Compile Include="Http\NameValueExtensionsTests.cs" />
-    <Compile Include="Http\HttpRequestorTests.cs" />
+    <Compile Include="Http\RequestCoordinatorTests.cs" />
     <Compile Include="Http\DictionaryExtensionsTests.cs" />
     <Compile Include="Serialization\ResponseDeserializerTests.cs" />
     <Compile Include="Serialization\StringDeserializerTests.cs" />
