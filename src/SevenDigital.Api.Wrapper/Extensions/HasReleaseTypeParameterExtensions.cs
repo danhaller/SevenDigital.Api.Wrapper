@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SevenDigital.Api.Schema.ParameterDefinitions.Get;
+﻿using SevenDigital.Api.Schema.ParameterDefinitions.Get;
 using SevenDigital.Api.Schema.ReleaseEndpoint;
 
 namespace SevenDigital.Api.Wrapper.Extensions

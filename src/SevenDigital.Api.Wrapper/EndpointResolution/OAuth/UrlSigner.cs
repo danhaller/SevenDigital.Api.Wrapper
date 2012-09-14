@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SevenDigital.Api.Wrapper.EndpointResolution.OAuth
 {
-	public class UrlSigner : IUrlSigner
+	public class UrlSigner: IUrlSigner
 	{
 		private readonly OAuthBase _oAuthBase;
 		
@@ -51,10 +51,14 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution.OAuth
 			IOAuthCredentials consumerCredentials, Dictionary<string, string> postParameters)
 		{
 			if (string.IsNullOrEmpty(consumerCredentials.ConsumerKey))
-				throw new ArgumentException("ConsumerKey can not be null or empty");
+			{
+			    throw new ArgumentException("ConsumerKey can not be null or empty");
+			}
 
 			if (string.IsNullOrEmpty(consumerCredentials.ConsumerSecret))
-				throw new ArgumentException("ConsumerSecret can not be null or empty");
+			{
+			    throw new ArgumentException("ConsumerSecret can not be null or empty");
+			}
 
 			var timestamp = _oAuthBase.GenerateTimeStamp();
 			var nonce = _oAuthBase.GenerateNonce();

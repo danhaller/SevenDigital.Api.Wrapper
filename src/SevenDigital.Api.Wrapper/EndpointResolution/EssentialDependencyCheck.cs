@@ -25,7 +25,7 @@ namespace SevenDigital.Api.Wrapper.EndpointResolution
 
 			var allTypesFound = FindAllTypesThatImplementTClass(loadedAssemblies);
 
-			if (allTypesFound.Count() < 1)
+			if (! allTypesFound.Any())
 			{
 				throw new MissingDependencyException(typeof(TClass));
 			}
