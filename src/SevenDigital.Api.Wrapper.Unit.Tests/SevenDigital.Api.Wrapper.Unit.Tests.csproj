@@ -60,8 +60,8 @@
     <Compile Include="AppSettingsCredentials.cs" />
     <Compile Include="BasketEndpoint\BasketEndpointTests.cs" />
     <Compile Include="Deserialisation\Payment\CardTypesTests.cs" />
-    <Compile Include="Deserialisation\User\Payment\Cards_unit_tests.cs" />
-    <Compile Include="Deserialisation\User\Payment\AddCardsTests.cs" />
+    <Compile Include="Deserialisation\User\Payment\AddCardTests.cs" />
+    <Compile Include="Deserialisation\User\Payment\CardsUnitTests.cs" />
     <Compile Include="Deserialisation\User\Payment\DeleteCardTests.cs" />
     <Compile Include="EndpointResolution\EndpointResolverTests.cs" />
     <Compile Include="EndpointResolution\OAuth\UrlSignerTests.cs" />

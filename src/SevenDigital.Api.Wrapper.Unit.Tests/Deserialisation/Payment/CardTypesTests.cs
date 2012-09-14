@@ -12,14 +12,14 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.Payment
 	{
 		private const string ResponseBody = " <response status=\"ok\" version=\"1.2\"><cardTypes><cardType id=\"MAESTRO\">Maestro</cardType><cardType id=\"MASTERCARD\">MasterCard</cardType><cardType id=\"VISA\">Visa</cardType><cardType id=\"AMEX\">American Express</cardType></cardTypes></response>";
 
-		private readonly Response stubResponse = new Response(HttpStatusCode.OK, ResponseBody);
+		private readonly Response _stubResponse = new Response(HttpStatusCode.OK, ResponseBody);
 
 		[Test]
 		public void can_deseralize_card_types()
 		{
 			var xmlSerializer = new ResponseDeserializer<PaymentCardTypes>();
 
-			var result = xmlSerializer.Deserialize(stubResponse);
+			var result = xmlSerializer.Deserialize(this._stubResponse);
 
 			Assert.That(result.CardTypes.Count(),Is.EqualTo(4));
 			var lastCard = result.CardTypes.Last();

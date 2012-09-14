@@ -17,7 +17,6 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.BasketEndpoint
 			Assert.That(basketEndpoint.Parameters.Keys.Contains("trackId"),Is.False);
 		}
 
-
 		[Test]
 		public void Should_remove_track_and_release_parameters_when_getting_a_basket()
 		{

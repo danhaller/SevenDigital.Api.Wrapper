@@ -9,9 +9,9 @@ using SevenDigital.Api.Wrapper.Serialization;
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.User.Payment
 {
 	[TestFixture]
-	public class Cards_unit_tests
+	public class CardsUnitTests
 	{
-		private const string responseXml = 
+		private const string ResponseXml = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
 				"<response xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\" status=\"ok\" version=\"1.2\">" +
 				"<cards>" +
@@ -26,14 +26,14 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.User.Payment
 				"</cards>" +
 				"</response>";
 
-		private readonly Response response = new Response(HttpStatusCode.OK, responseXml);
+		private readonly Response _response = new Response(HttpStatusCode.OK, ResponseXml);
 
 		[Test]
 		public void can_deserialise_response_user_cards()
 		{
 			var xmlSerializer = new ResponseDeserializer<Cards>();
 
-			var deserializedCards = xmlSerializer.Deserialize(response);
+			var deserializedCards = xmlSerializer.Deserialize(this._response);
 
 			var firstCard = deserializedCards.UserCards[0];
 			Assert.That(deserializedCards.UserCards.Count(), Is.EqualTo(1));
@@ -47,7 +47,6 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.User.Payment
 
 			Assert.That(firstCard.ExpiryDate, Is.EqualTo("201202"));
 			Assert.That(firstCard.FormatedExpiryDate, Is.EqualTo(new DateTime(2012, 02, 29, 23, 59, 59, 999)));
-
 		}
 	}
 }

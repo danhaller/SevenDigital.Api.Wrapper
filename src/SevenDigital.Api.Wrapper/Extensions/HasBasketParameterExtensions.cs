@@ -40,7 +40,6 @@ namespace SevenDigital.Api.Wrapper
 			api.WithParameter("basketId", basketId);
 			api.WithParameter("releaseId", releaseId.ToString());
 
-
 			return api;
 		}
 
