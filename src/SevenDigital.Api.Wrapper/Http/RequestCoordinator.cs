@@ -89,8 +89,13 @@ namespace SevenDigital.Api.Wrapper.Http
 			if (requestData.HttpMethod == HttpMethod.Get)
 			{
 				var oauthParam = "oauth_consumer_key=" + _oAuthCredentials.ConsumerKey;
+				uriString = uriString + "?" + oauthParam;
+
 				var otherQueryParams = mutableParams.ToQueryString(true);
-				uriString = uriString + "?" + oauthParam + "&" + otherQueryParams;
+				if (! string.IsNullOrEmpty(otherQueryParams))
+				{
+					uriString = uriString + "&" + otherQueryParams;
+				}
 			}
 			return uriString;
 		}
