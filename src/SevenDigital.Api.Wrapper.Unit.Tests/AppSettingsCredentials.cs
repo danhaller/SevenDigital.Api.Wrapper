@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-
-namespace SevenDigital.Api.Wrapper.Unit.Tests
+﻿namespace SevenDigital.Api.Wrapper.Unit.Tests
 {
 	public class AppSettingsCredentials : IOAuthCredentials
 	{

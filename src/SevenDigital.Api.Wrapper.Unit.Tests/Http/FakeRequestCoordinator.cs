@@ -1,20 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SevenDigital.Api.Wrapper.Http;
 
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 {
-    public class FakeRequestCoordinator : IRequestCoordinator
-    {
-		public async Task<Response> GetDataAsync(RequestData requestData)
+	public class FakeRequestCoordinator : IRequestCoordinator
+	{
+		private readonly Response _fakeResponse;
+
+		public FakeRequestCoordinator(Response fakeResponse)
 		{
-            return await Task.Factory.StartNew(() => FakeResponse);
+			_fakeResponse = fakeResponse;
 		}
 
-        public string EndpointUrl(RequestData requestData)
+		public async Task<Response> GetDataAsync(RequestData requestData)
+		{
+			return await Task.Factory.StartNew(() => _fakeResponse);
+		}
+
+		public string EndpointUrl(RequestData requestData)
 		{
 			throw new NotImplementedException();
 		}
@@ -24,7 +28,5 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 			get { throw new NotImplementedException(); }
 			set { throw new NotImplementedException(); }
 		}
-
-        public Response FakeResponse { get; set; }
 	}
 }

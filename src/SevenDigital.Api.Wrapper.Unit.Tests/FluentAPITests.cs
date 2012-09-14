@@ -14,15 +14,15 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 	[TestFixture]
 	public class FluentApiTests
 	{
-		private const string VALID_STATUS_XML = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"ok\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\"><serviceStatus><serverTime>2011-05-31T15:31:22Z</serverTime></serviceStatus></response>";
+		private const string ValidStatusXml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"ok\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\"><serviceStatus><serverTime>2011-05-31T15:31:22Z</serverTime></serviceStatus></response>";
 
-		private readonly Response stubResponse = new Response(HttpStatusCode.OK, VALID_STATUS_XML);
+		private readonly Response _stubResponse = new Response(HttpStatusCode.OK, ValidStatusXml);
 
 		[Test]
 		public void Should_fire_requestcoordinator_with_correct_endpoint_on_resolve()
 		{
 			var requestCoordinator = A.Fake<IRequestCoordinator>();
-			requestCoordinator.MockGetDataAsync(stubResponse);
+			requestCoordinator.MockGetDataAsync(this._stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).PleaseAsync();
 
@@ -36,7 +36,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		public void Should_fire_requestcoordinator_with_correct_methodname_on_resolve()
 		{
 			var requestCoordinator = A.Fake<IRequestCoordinator>();
-			requestCoordinator.MockGetDataAsync(stubResponse);
+			requestCoordinator.MockGetDataAsync(this._stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).WithMethod(HttpMethod.Post).PleaseAsync();
 
@@ -50,7 +50,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		public void Should_fire_requestcoordinator_with_correct_parameters_on_resolve()
 		{
 			var requestCoordinator = A.Fake<IRequestCoordinator>();
-			requestCoordinator.MockGetDataAsync(stubResponse);
+			requestCoordinator.MockGetDataAsync(this._stubResponse);
 
 			new FluentApi<Status>(requestCoordinator).WithParameter("artistId", "123").PleaseAsync();
 
@@ -64,7 +64,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		public void Should_use_custom_http_client()
 		{
 			var fakeRequestCoordinator = A.Fake<IRequestCoordinator>();
-			var fakeHttpClient = new FakeHttpClientWrapper();
+			var fakeHttpClient = new FakeHttpClientWrapper(this._stubResponse);
 
 			new FluentApi<Status>(fakeRequestCoordinator).UsingClient(fakeHttpClient);
 
@@ -74,10 +74,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		[Test]
 		public async void should_put_payload_in_action_result()
 		{
-			var requestCoordinator = new FakeRequestCoordinator 
-				{ 
-					FakeResponse = stubResponse 
-				};
+			var requestCoordinator = new FakeRequestCoordinator(this._stubResponse);
 
 			var status = await new FluentApi<Status>(requestCoordinator)
 				.PleaseAsync();

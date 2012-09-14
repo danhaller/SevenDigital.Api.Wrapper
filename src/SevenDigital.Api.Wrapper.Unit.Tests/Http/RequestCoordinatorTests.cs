@@ -13,8 +13,8 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 	[TestFixture]
 	public class RequestCoordinatorTests
 	{
-		private const string API_URL = "http://api.7digital.com/1.2";
-		private const string SERVICE_STATUS = "<response status=\"ok\" version=\"1.2\" ><serviceStatus><serverTime>2011-03-04T08:10:29Z</serverTime></serviceStatus></response>";
+		private const string ApiUrl = "http://api.7digital.com/1.2";
+		private const string ServiceStatus = "<response status=\"ok\" version=\"1.2\" ><serviceStatus><serverTime>2011-03-04T08:10:29Z</serverTime></serviceStatus></response>";
 
 		private readonly string _consumerKey = new AppSettingsCredentials().ConsumerKey;
 		private IHttpClientWrapper _httpClient;
@@ -30,22 +30,22 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		}
 
 		[Test]
-		public void Should_fire_resolve_with_correct_values()
+		public async void Should_fire_resolve_with_correct_values()
 		{
-			_httpClient.MockGetAsync(new Response(HttpStatusCode.OK, SERVICE_STATUS));
+			_httpClient.MockGetAsync(new Response(HttpStatusCode.OK, ServiceStatus));
 
 			HttpMethod expectedMethod = HttpMethod.Get;
 			var expectedHeaders = new Dictionary<string, string>();
-			var expected = string.Format("{0}/test?oauth_consumer_key={1}", API_URL, _consumerKey);
+			var expected = string.Format("{0}/test?oauth_consumer_key={1}", ApiUrl, _consumerKey);
 
 			var endPointState = new RequestData 
 				{ 
-						UriPath = "test", 
-						HttpMethod = expectedMethod, 
-						Headers = expectedHeaders 
+					UriPath = "test", 
+					HttpMethod = expectedMethod, 
+					Headers = expectedHeaders 
 				};
 
-			_requestCoordinator.GetDataAsync(endPointState);
+			await _requestCoordinator.GetDataAsync(endPointState);
 
 			_httpClient.GetAsyncOnUrlMustHaveHappened(expected);
 		}
@@ -53,20 +53,21 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		[Test]
 		public void Should_fire_resolve_with_url_encoded_parameters()
 		{
-			_httpClient.MockGetAsync(new Response(HttpStatusCode.OK, SERVICE_STATUS));
-			const string unEncodedParameterValue = "Alive & Amplified";
+			_httpClient.MockGetAsync(new Response(HttpStatusCode.OK, ServiceStatus));
+			const string UnEncodedParameterValue = "Alive & Amplified";
 
-			const string expectedParameterValue = "Alive%20%26%20Amplified";
+			const string ExpectedParameterValue = "Alive%20%26%20Amplified";
 			var expectedHeaders = new Dictionary<string, string>();
-			var testParameters = new Dictionary<string, string> { { "q", unEncodedParameterValue } };
-			var expected = string.Format("{0}/test?oauth_consumer_key={1}&q={2}", API_URL, _consumerKey, expectedParameterValue);
+			var testParameters = new Dictionary<string, string> { { "q", UnEncodedParameterValue } };
+			var expected = string.Format("{0}/test?oauth_consumer_key={1}&q={2}", ApiUrl, _consumerKey, ExpectedParameterValue);
 
 			var endPointState = new RequestData 
 				{ 
-						UriPath = "test", 
-						HttpMethod = HttpMethod.Get, 
-						Headers = expectedHeaders, 
-						Parameters = testParameters };
+					UriPath = "test", 
+					HttpMethod = HttpMethod.Get, 
+					Headers = expectedHeaders, 
+					Parameters = testParameters 
+				};
 
 			_requestCoordinator.GetDataAsync(endPointState);
 
@@ -99,11 +100,10 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 			Assert.That(hitEndpoint.SelectSingleNode("//serverTime"), Is.Not.Null);
 		}
 
-
 		[Test]
 		public async void Should_return_xmlnode_if_valid_xml_received_using_async()
 		{
-			var fakeClient = new FakeHttpClientWrapper(new Response(HttpStatusCode.OK, SERVICE_STATUS));
+			var fakeClient = new FakeHttpClientWrapper(new Response(HttpStatusCode.OK, ServiceStatus));
 
 			var endpointResolver = new RequestCoordinator(fakeClient, _urlSigner, EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
 
@@ -120,13 +120,13 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		[Test]
 		public void Should_use_api_uri_provided_by_IApiUri_interface()
 		{
-			const string expectedApiUri = "http://api.7dizzle";
+			const string ExpectedApiUri = "http://api.7dizzle";
 
 			Given_a_urlresolver_that_returns_valid_xml();
 
 			var apiUri = A.Fake<IApiUri>();
 
-			A.CallTo(() => apiUri.Uri).Returns(expectedApiUri);
+			A.CallTo(() => apiUri.Uri).Returns(ExpectedApiUri);
 
 			IOAuthCredentials oAuthCredentials = EssentialDependencyCheck<IOAuthCredentials>.Instance;
 			var endpointResolver = new RequestCoordinator(_httpClient, _urlSigner, oAuthCredentials, apiUri);
@@ -142,35 +142,36 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 
 			A.CallTo(() => apiUri.Uri).MustHaveHappened(Repeated.Exactly.Once);
 
-			_httpClient.GetAsyncOnUrlContainingMustHaveHappenedOnce(expectedApiUri);
+			_httpClient.GetAsyncOnUrlContainingMustHaveHappenedOnce(ExpectedApiUri);
 		}
 
 		[Test]
 		public void Construct_url_should_combine_url_and_query_params_for_get_requests()
 		{
-			const string uriPath = "something";
-			var result = _requestCoordinator.EndpointUrl(new RequestData { UriPath = uriPath });
+			const string UriPath = "something";
+			var expectedResult = ApiUrl + "/" + UriPath + "?oauth_consumer_key=" + _consumerKey;
+			var result = _requestCoordinator.EndpointUrl(new RequestData { UriPath = UriPath });
 
-			Assert.That(result, Is.EqualTo(API_URL + "/" + uriPath + "?oauth_consumer_key=" + _consumerKey));
+			Assert.That(result, Is.EqualTo(expectedResult));
 		}
 
 		[Test]
 		public void Construct_url_should_combine_url_and_not_query_params_for_post_requests()
 		{
-			const string uriPath = "something";
+			const string UriPath = "something";
 			var request = new RequestData
 				{
-					UriPath = uriPath,
+					UriPath = UriPath,
 					HttpMethod = HttpMethod.Post
 				};
 			var result = _requestCoordinator.EndpointUrl(request);
 
-			Assert.That(result, Is.EqualTo(API_URL + "/" + uriPath ));
+			Assert.That(result, Is.EqualTo(ApiUrl + "/" + UriPath ));
 		}
 
 		private void Given_a_urlresolver_that_returns_valid_xml()
 		{
-			_httpClient.MockGetAsync(new Response( HttpStatusCode.OK, SERVICE_STATUS));
+			_httpClient.MockGetAsync(new Response( HttpStatusCode.OK, ServiceStatus));
 		}
 	}
 }
