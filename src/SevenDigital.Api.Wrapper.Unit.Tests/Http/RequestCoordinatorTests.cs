@@ -11,14 +11,14 @@ using SevenDigital.Api.Wrapper.Http;
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 {
 	[TestFixture]
-	public class HttpRequestorTests
+	public class RequestCoordinatorTests
 	{
 		private const string API_URL = "http://api.7digital.com/1.2";
 		private const string SERVICE_STATUS = "<response status=\"ok\" version=\"1.2\" ><serviceStatus><serverTime>2011-03-04T08:10:29Z</serverTime></serviceStatus></response>";
 
 		private readonly string _consumerKey = new AppSettingsCredentials().ConsumerKey;
 		private IHttpClientWrapper _httpClient;
-		private IHttpRequestor _requestCoordinator;
+		private IRequestCoordinator _requestCoordinator;
 		private IUrlSigner _urlSigner;
 
 		[SetUp]
@@ -26,7 +26,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		{
 			_httpClient = A.Fake<IHttpClientWrapper>();
 			_urlSigner = A.Fake<IUrlSigner>();
-			_requestCoordinator = new HttpRequestor(_httpClient, _urlSigner, EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
+			_requestCoordinator = new RequestCoordinator(_httpClient, _urlSigner, EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
 		}
 
 		[Test]
@@ -105,7 +105,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		{
 			var fakeClient = new FakeHttpClientWrapper(new Response(HttpStatusCode.OK, SERVICE_STATUS));
 
-			var endpointResolver = new HttpRequestor(fakeClient, _urlSigner, EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
+			var endpointResolver = new RequestCoordinator(fakeClient, _urlSigner, EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
 
 			var responseData = await  endpointResolver.GetDataAsync(new RequestData());
 			var response = responseData.Body;
@@ -129,7 +129,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 			A.CallTo(() => apiUri.Uri).Returns(expectedApiUri);
 
 			IOAuthCredentials oAuthCredentials = EssentialDependencyCheck<IOAuthCredentials>.Instance;
-			var endpointResolver = new HttpRequestor(_httpClient, _urlSigner, oAuthCredentials, apiUri);
+			var endpointResolver = new RequestCoordinator(_httpClient, _urlSigner, oAuthCredentials, apiUri);
 
 			var endPointState = new RequestData
 				{
