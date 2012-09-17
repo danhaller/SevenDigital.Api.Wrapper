@@ -7,12 +7,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 	public class ArtistDetailsTests
 	{
 		[Test]
-		public async void Can_hit_endpoint_with_fluent_interface()
+		public void Can_hit_endpoint_with_fluent_interface()
 		{
-			var artist = await Api<Artist>
+			var artist = Api<Artist>
 				.Create
 				.WithArtistId(1)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Name, Is.EqualTo("Keane"));
@@ -22,12 +23,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		}
 
 		[Test]
-		public async void Can_hit_endpoint_with_fluent_async_api()
+		public void Can_hit_endpoint_with_fluent_async_api()
 		{
-			Artist artist = await Api<Artist>
+			Artist artist = Api<Artist>
 				.Create
 				.WithArtistId(1)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Name, Is.EqualTo("Keane"));

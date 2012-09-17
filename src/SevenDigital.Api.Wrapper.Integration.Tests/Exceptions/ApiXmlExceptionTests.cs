@@ -10,7 +10,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Exceptions
 	public class ApiXmlExceptionTests
 	{
 		[Test]
-		public async void Should_fail_correctly_if_xml_error_returned()
+		public void Should_fail_correctly_if_xml_error_returned()
 		{
 			// -- Deliberate error response
 			Console.WriteLine("Trying artist/details without artistId parameter...");
@@ -19,7 +19,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Exceptions
 
 			try
 			{
-				await Api<Artist>.Create.PleaseAsync();
+				Api<Artist>.Create.PleaseAsync().Await();
 			}
 			catch (ApiXmlException ex)
 			{
@@ -32,7 +32,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Exceptions
 		}
 
 		[Test]
-		public async void Should_fail_correctly_if_non_xml_error_returned_eg_unauthorised()
+		public void Should_fail_correctly_if_non_xml_error_returned_eg_unauthorised()
 		{
 			// -- Deliberate unauthorized response
 			Console.WriteLine("Trying user/locker without any credentials...");
@@ -40,7 +40,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Exceptions
 
 			try
 			{
-				await Api<Locker>.Create.PleaseAsync();
+				Api<Locker>.Create.PleaseAsync().Await();
 			}
 			catch (ApiXmlException ex)
 			{

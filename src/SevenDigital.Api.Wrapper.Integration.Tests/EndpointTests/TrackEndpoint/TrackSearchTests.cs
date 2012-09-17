@@ -8,11 +8,12 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TrackEndpoint
 	public class TrackSearchTests
 	{
 		[Test]
-		public async void Can_hit_endpoint()
+		public void Can_hit_endpoint()
 		{
-			TrackSearch release = await Api<TrackSearch>.Create
+			TrackSearch release = Api<TrackSearch>.Create
 				.WithParameter("q", "Happy")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.Results.Count, Is.GreaterThan(0));
@@ -20,13 +21,14 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TrackEndpoint
 		}
 
 		[Test]
-		public async void Can_hit_endpoint_with_paging()
+		public void Can_hit_endpoint_with_paging()
 		{
-			TrackSearch artistBrowse = await Api<TrackSearch>.Create
+			TrackSearch artistBrowse = Api<TrackSearch>.Create
 				.WithParameter("q","Happy")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "20")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));

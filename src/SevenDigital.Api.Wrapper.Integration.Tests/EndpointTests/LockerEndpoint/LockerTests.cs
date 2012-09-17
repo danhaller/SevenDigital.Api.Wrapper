@@ -21,34 +21,37 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.LockerEndpoin
 		}
 
 		[Test]
-		public async void Should_get_a_users_locker_with_correct_access_credentials()
+		public void Should_get_a_users_locker_with_correct_access_credentials()
 		{
-			var locker = await Api<Locker>.Create
+			var locker = Api<Locker>.Create
 				.ForUser(_token, _tokenSecret)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(locker.Response.LockerReleases.Count, Is.GreaterThan(0));
 		}
 
 		[Test]
-		public async void Should_get_specific_users_release()
+		public void Should_get_specific_users_release()
 		{
-			var locker = await Api<Locker>.Create
+			var locker = Api<Locker>.Create
 				.ForReleaseId(343418)
 				.ForUser(_token, _tokenSecret)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(locker.Response.LockerReleases.Count, Is.EqualTo(1));
 		}
 
 		[Test]
-		public async void Should_get_specific_users_track()
+		public void Should_get_specific_users_track()
 		{
-			var locker = await Api<Locker>.Create
+			var locker = Api<Locker>.Create
 				.ForReleaseId(343418)
 				.ForTrackId(3846716)
 				.ForUser(_token, _tokenSecret)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(locker.Response.LockerReleases.FirstOrDefault().LockerTracks.Count, Is.EqualTo(1));
 		}

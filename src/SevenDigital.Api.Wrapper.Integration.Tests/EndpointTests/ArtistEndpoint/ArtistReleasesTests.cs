@@ -8,12 +8,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 	public class ArtistReleasesTests
 	{
 		[Test]
-		public async void Can_hit_endpoint_with_fluent_interface()
+		public void Can_hit_endpoint_with_fluent_interface()
 		{
-			var artist = await Api<ArtistReleases>
+			var artist = Api<ArtistReleases>
 				.Create
 				.WithArtistId(1)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Releases.Count, Is.GreaterThan(0));
@@ -21,14 +22,15 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		}
 
 		[Test]
-		public async void Can_hit_endpoint_with_paging()
+		public void Can_hit_endpoint_with_paging()
 		{
-			var artistBrowse = await Api<ArtistReleases>
+			var artistBrowse = Api<ArtistReleases>
 				.Create
 				.WithPageNumber(2)
 				.WithPageSize(20)
 				.WithParameter("artistId","1")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 			
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));

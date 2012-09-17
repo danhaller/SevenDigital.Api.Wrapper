@@ -7,12 +7,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 	public class ReleaseRecommendTests
 	{
 		[Test]
-		public async void Can_hit_endpoint()
+		public void Can_hit_endpoint()
 		{
-			ReleaseRecommend release = await Api<ReleaseRecommend>.Create
+			ReleaseRecommend release = Api<ReleaseRecommend>.Create
 				.WithParameter("releaseId", "155408")
 				.WithParameter("country", "GB")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.RecommendedItems.Count, Is.GreaterThan(0));

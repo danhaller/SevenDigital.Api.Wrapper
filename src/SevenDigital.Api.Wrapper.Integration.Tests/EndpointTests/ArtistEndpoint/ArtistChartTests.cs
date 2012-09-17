@@ -10,16 +10,18 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 	public class ArtistChartTests
 	{
 		[Test]
-		public async void Can_hit_fluent_endpoint()
+		public void Can_hit_fluent_endpoint()
 		{
 			var chartDate = DateTime.Today.AddDays(-7);
 
-			var artist = await Api<ArtistChart>
+			var artist = Api<ArtistChart>
 				.Create
 				.WithToDate(chartDate)
 				.WithPeriod(ChartPeriod.Week)
 				.WithPageSize(20)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
+
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.ChartItems.Count, Is.EqualTo(20));

@@ -9,40 +9,43 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 	public class ArtistTopTracksTests
 	{
 		[Test]
-		public async void Can_hit_endpoint()
+		public void Can_hit_endpoint()
 		{
-			ArtistTopTracks artist = await new FluentApi<ArtistTopTracks>()
+			ArtistTopTracks artist = new FluentApi<ArtistTopTracks>()
 				.WithParameter("artistId", "1")
 				.WithParameter("country", "GB")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
 		}
 
 		[Test]
-		public async void Can_hit_endpoint_with_fluent_interface()
+		public void Can_hit_endpoint_with_fluent_interface()
 		{
-			var artist = await Api<ArtistTopTracks>
+			var artist = Api<ArtistTopTracks>
 				.Create
 				.WithArtistId(1)
 				.WithParameter("country", "GB")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 			
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
 		}
 
 		[Test]
-		public async void Can_handle_pagingerror_with_paging()
+		public void Can_handle_pagingerror_with_paging()
 		{
 			try
 			{
-				await new FluentApi<ArtistTopTracks>()
+				new FluentApi<ArtistTopTracks>()
 					.WithParameter("artistId", "1")
 					.WithParameter("page", "2")
 					.WithParameter("pageSize", "10")
-					.PleaseAsync();
+					.PleaseAsync()
+					.Await();
 			} 
 			catch(ApiXmlException ex)
 			{

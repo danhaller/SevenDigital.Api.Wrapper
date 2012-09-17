@@ -7,11 +7,12 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TrackEndpoint
 	public class TrackDetailsTests
 	{
 		[Test]
-		public async void Can_hit_endpoint()
+		public void Can_hit_endpoint()
 		{
-			Track track = await Api<Track>.Create
+			Track track = Api<Track>.Create
 				.ForTrackId(12345)
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(track, Is.Not.Null);
 			Assert.That(track.Title, Is.EqualTo("I Love You"));

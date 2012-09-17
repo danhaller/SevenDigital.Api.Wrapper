@@ -10,11 +10,12 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 	public class ReleaseByTagTopTests
 	{
 		[Test]
-		public async void Can_hit_endpoint()
+		public void Can_hit_endpoint()
 		{
-			ReleaseByTagTop tags = await Api<ReleaseByTagTop>.Create
+			ReleaseByTagTop tags = Api<ReleaseByTagTop>.Create
 				.WithParameter("tags", "rock")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(tags, Is.Not.Null);
 			Assert.That(tags.TaggedReleases.Count, Is.GreaterThan(0));
@@ -23,13 +24,14 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TagsEndpoint
 		}
 
 		[Test]
-		public async void Can_hit_endpoint_with_paging()
+		public void Can_hit_endpoint_with_paging()
 		{
-			ReleaseByTagTop artistBrowse = await Api<ReleaseByTagTop>.Create
+			ReleaseByTagTop artistBrowse = Api<ReleaseByTagTop>.Create
 				.WithParameter("tags", "rock")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "20")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));

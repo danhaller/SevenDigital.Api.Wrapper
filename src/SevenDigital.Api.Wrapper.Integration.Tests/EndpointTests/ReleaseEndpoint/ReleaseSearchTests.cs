@@ -8,13 +8,14 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 	public class ReleaseSearchTests
 	{
 		[Test]
-		public async void Can_hit_endpoint()
+		public void Can_hit_endpoint()
 		{
-			ReleaseSearch release = await Api<ReleaseSearch>.Create
+			ReleaseSearch release = Api<ReleaseSearch>.Create
 				.WithParameter("q", "no surprises")
 				.WithParameter("type", ReleaseType.Single.ToString())
 				.WithParameter("country", "GB")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(release, Is.Not.Null);
 			Assert.That(release.Results.Count, Is.GreaterThan(0));
@@ -22,13 +23,14 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		}
 
 		[Test]
-		public async void Can_hit_endpoint_with_paging()
+		public void Can_hit_endpoint_with_paging()
 		{
-			ReleaseSearch artistBrowse = await Api<ReleaseSearch>.Create
+			ReleaseSearch artistBrowse = Api<ReleaseSearch>.Create
 				.WithParameter("q", "no surprises")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "20")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));
@@ -36,13 +38,14 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ReleaseEndpoi
 		}
 
 		[Test]
-		public async void Can_get_multiple_results()
+		public void Can_get_multiple_results()
 		{
-			var artistSearch = await Api<ReleaseSearch>.Create
+			var artistSearch = Api<ReleaseSearch>.Create
 				.WithParameter("q", "pink")
 				.WithParameter("page", "1")
 				.WithParameter("pageSize", "20")
-				.PleaseAsync();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
 		}

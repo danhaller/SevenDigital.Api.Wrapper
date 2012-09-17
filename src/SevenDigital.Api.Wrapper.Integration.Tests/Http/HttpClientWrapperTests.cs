@@ -21,41 +21,46 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Http
 		}
 
 		[Test]
-		public async void Can_resolve_uri()
+		public void Can_resolve_uri()
 		{
 			string url = string.Format("{0}/status?oauth_consumer_key={1}", ApiUrl, this._consumerKey);
 			var headers = new Dictionary<string, string>();
 
 			var httpClient = new HttpClientWrapper();
-			var response = await httpClient.GetAsync(headers, url);
+			var response = httpClient.GetAsync(headers, url)
+				.Await();
 
 			AssertResponse(response, HttpStatusCode.OK);
 		}
 
 		[Test]
-		public async void Bad_url_should_return_not_found()
+		public void Bad_url_should_return_not_found()
 		{
 			string url = string.Format("{0}/foo/bar/fish/1234?oauth_consumer_key={1}", ApiUrl, this._consumerKey);
 			var headers = new Dictionary<string, string>();
 
 			var httpClient = new HttpClientWrapper();
-			var response = await httpClient.GetAsync(headers, url);
+			var response = httpClient.GetAsync(headers, url)
+				.Await();
+
 			AssertResponse(response, HttpStatusCode.NotFound);
 		}
 
 		[Test]
-		public async void No_key_should_return_unauthorized()
+		public void No_key_should_return_unauthorized()
 		{
 			string url = string.Format("{0}/status", ApiUrl);
 			var headers = new Dictionary<string, string>();
 
 			var httpClient = new HttpClientWrapper();
-			var response = await httpClient.GetAsync(headers, url);
+			var response = httpClient.GetAsync(headers, url)
+				.Await();
+
 			AssertResponse(response, HttpStatusCode.Unauthorized);
 		}
 
 		[Test]
-		public async void bad_url_post__should_return_not_found()
+		public void bad_url_post__should_return_not_found()
 		{
 			string url = string.Format("{0}/foo/bar/fish/1234?oauth_consumer_key={1}", ApiUrl, this._consumerKey);
 			var headers = new Dictionary<string, string>();
@@ -65,7 +70,9 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Http
 				};
 
 			var httpClient = new HttpClientWrapper();
-			var response = await httpClient.PostAsync(headers, parameters, url);
+			var response = httpClient
+				.PostAsync(headers, parameters, url)
+				.Await();
 
 			AssertResponse(response, HttpStatusCode.NotFound);
 		}
