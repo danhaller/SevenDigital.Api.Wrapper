@@ -30,7 +30,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		}
 
 		[Test]
-		public async void Should_fire_resolve_with_correct_values()
+		public void Should_fire_resolve_with_correct_values()
 		{
 			_httpClient.MockGetAsync(new Response(HttpStatusCode.OK, ServiceStatus));
 
@@ -45,7 +45,10 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 					Headers = expectedHeaders 
 				};
 
-			await _requestCoordinator.GetDataAsync(endPointState);
+			_requestCoordinator
+				.GetDataAsync(endPointState)
+				.Await();
+
 
 			_httpClient.GetAsyncOnUrlMustHaveHappened(expected);
 		}
@@ -89,11 +92,14 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		}
 
 		[Test]
-		public async void Should_return_xmlnode_if_valid_xml_received()
+		public void Should_return_xmlnode_if_valid_xml_received()
 		{
 			Given_a_urlresolver_that_returns_valid_xml();
 
-			var response = await _requestCoordinator.GetDataAsync(new RequestData());
+			var response = _requestCoordinator
+				.GetDataAsync(new RequestData())
+				.Await();
+
 			var hitEndpoint = new XmlDocument();
 			hitEndpoint.LoadXml(response.Body);
 			Assert.That(hitEndpoint.HasChildNodes);
@@ -101,13 +107,17 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		}
 
 		[Test]
-		public async void Should_return_xmlnode_if_valid_xml_received_using_async()
+		public void Should_return_xmlnode_if_valid_xml_received_using_async()
 		{
 			var fakeClient = new FakeHttpClientWrapper(new Response(HttpStatusCode.OK, ServiceStatus));
 
-			var endpointResolver = new RequestCoordinator(fakeClient, _urlSigner, EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
+			var endpointResolver = new RequestCoordinator(fakeClient, _urlSigner, 
+				EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
 
-			var responseData = await  endpointResolver.GetDataAsync(new RequestData());
+			var responseData = endpointResolver
+				.GetDataAsync(new RequestData())
+				 .Await();
+
 			var response = responseData.Body;
 
 			var payload = new XmlDocument();
