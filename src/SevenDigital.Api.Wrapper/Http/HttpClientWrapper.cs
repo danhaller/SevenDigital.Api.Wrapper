@@ -41,7 +41,7 @@ namespace SevenDigital.Api.Wrapper.Http
 				httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 			}
 
-			var productInfo = new ProductInfoHeaderValue("7digital .Net Api Wrapper", "4.5");
+			var productInfo = new ProductInfoHeaderValue("7digital-.Net-Api-Wrapper", "4.5");
 			httpClient.DefaultRequestHeaders.UserAgent.Add(productInfo);
 
 			return httpClient;
