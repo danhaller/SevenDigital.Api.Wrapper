@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace SevenDigital.Api.Wrapper.Integration.Tests
 {
@@ -6,8 +7,20 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests
 	{
 		public static T Await<T>(this Task<T> task)
 		{
-			task.Wait();
-			return task.Result;
+			try
+			{
+				task.Wait();
+				return task.Result;
+			}
+			catch (AggregateException aggreggateEx)
+			{
+				if (aggreggateEx.InnerExceptions.Count == 1)
+				{
+					throw aggreggateEx.InnerExceptions[0]; 
+				}
+
+				throw;
+			}
 		}
 	}
 }

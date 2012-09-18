@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Schema.ArtistEndpoint;
 
@@ -38,6 +39,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		[Test]
 		public void Can_handle_pagingerror_with_paging()
 		{
+			ApiXmlException expectedError = null;
 			try
 			{
 				new FluentApi<ArtistTopTracks>()
@@ -49,10 +51,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 			} 
 			catch(ApiXmlException ex)
 			{
-				Assert.That(ex.Error, Is.Not.Null);
-				Assert.That(ex.Error.Code, Is.EqualTo(1003));
-				Assert.That(ex.Error.ErrorMessage, Is.EqualTo("Requested page out of range"));
+				expectedError = ex;
 			}
+
+			Assert.That(expectedError, Is.Not.Null);
+			Assert.That(expectedError.Error, Is.Not.Null);
+			Assert.That(expectedError.Error.Code, Is.EqualTo(1003));
+			Assert.That(expectedError.Error.ErrorMessage, Is.EqualTo("Requested page out of range"));
 		}
 	}
 }

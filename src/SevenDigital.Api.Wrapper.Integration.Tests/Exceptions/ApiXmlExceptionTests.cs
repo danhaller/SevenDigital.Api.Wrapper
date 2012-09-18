@@ -49,7 +49,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Exceptions
 
 			Assert.That(apiXmlException, Is.Not.Null);
 			Assert.That(apiXmlException.Error.Code, Is.EqualTo(9001));
-			Assert.That(apiXmlException.Error.ErrorMessage, Is.EqualTo("OAuth authentication error: Resource requires access token"));
+			Assert.That(apiXmlException.Error.ErrorMessage, Is.EqualTo("OAuth authentication error: Not authorised - no user credentials provided"));
 		}
 	}
 }
