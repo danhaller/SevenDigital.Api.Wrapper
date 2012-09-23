@@ -28,10 +28,10 @@ Current invocataion:
 
 artist/details endpoint
 
-    Artist artist = Api<Artist>
-                        .Get
-                        .WithArtistId(1)
-                        .Please()
+    Artist artist = await Api<Artist>
+        .Get
+        .WithArtistId(1)
+        .PleaseAsync()
 
 Not all endpoints implemented yet: most of Artist and some of Release.
 
