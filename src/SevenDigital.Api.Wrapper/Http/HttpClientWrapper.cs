@@ -34,7 +34,7 @@ namespace SevenDigital.Api.Wrapper.Http
 
 		private System.Net.Http.HttpClient MakeHttpClient(IDictionary<string, string> headers)
 		{
-			var httpClient = new System.Net.Http.HttpClient();
+			var httpClient = new HttpClient();
 
 			foreach (var header in headers)
 			{

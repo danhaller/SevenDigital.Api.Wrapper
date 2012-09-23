@@ -1,3 +1,9 @@
+This is my .Net 4.5 branch of the 7Digital API Wrapper. Features are:
+
+ - All API operations are asynchronous and must be awaited.
+ - The HTTP handling code uses the System.Net.HttpClient class (new in .Net 4.5) and has several other refactorings for simplicity.
+ - Works only in .Net 4.5 and later.
+
 Branches and Releases
 =====================
 
