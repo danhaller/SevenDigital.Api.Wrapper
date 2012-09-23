@@ -29,9 +29,9 @@ Current invocataion:
 artist/details endpoint
 
     Artist artist = await Api<Artist>
-        .Get
+        .Create
         .WithArtistId(1)
-        .PleaseAsync()
+        .PleaseAsync();
 
 Not all endpoints implemented yet: most of Artist and some of Release.
 
