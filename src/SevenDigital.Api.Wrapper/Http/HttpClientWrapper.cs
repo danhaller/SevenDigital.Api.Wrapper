@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -39,7 +37,6 @@ namespace SevenDigital.Api.Wrapper.Http
 		{
 			var httpClient = new HttpClient(new HttpClientHandler
 				{
-					// todo - test this and the HeadersIndicateGippedContent code, and pick one. This is simpler if it works
 					AutomaticDecompression = DecompressionMethods.GZip
 				});
 
@@ -59,24 +56,8 @@ namespace SevenDigital.Api.Wrapper.Http
 		private static async Task<Response> MakeResponse(HttpResponseMessage httpResponse)
 		{
 			var headers = HttpHelpers.MapHeaders(httpResponse.Headers);
-			string responseBody = await ReadResponseBody(httpResponse);
+			string responseBody = await httpResponse.Content.ReadAsStringAsync();
 			return new Response(httpResponse.StatusCode, headers, responseBody);
-		}
-
-		private static async Task<string> ReadResponseBody(HttpResponseMessage httpResponse)
-		{
-			var contentIsGzipped = httpResponse.Content.Headers.ContentEncoding.Contains("gzip");
-
-			if (contentIsGzipped)
-			{
-				var contentStream = await httpResponse.Content.ReadAsStreamAsync();
-				var uncompressedStream = new GZipStream(contentStream, CompressionMode.Decompress);
-				var reader = new StreamReader(uncompressedStream);
-
-				return await reader.ReadToEndAsync();
-			}
-
-			return await httpResponse.Content.ReadAsStringAsync();
 		}
 	}
 }
