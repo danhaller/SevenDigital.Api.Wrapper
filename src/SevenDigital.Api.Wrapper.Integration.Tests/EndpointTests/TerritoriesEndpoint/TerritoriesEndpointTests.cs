@@ -67,7 +67,8 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TerritoriesEn
 		{
 			var countries = Api<Countries>
 				.Create
-				.Please();
+				.PleaseAsync()
+				.Await();
 
 			Assert.That(countries, Is.Not.Null);
 			Assert.That(countries.CountryItems, Is.Not.Null);
@@ -79,7 +80,8 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TerritoriesEn
 		{
 			var countries = Api<Countries>
 				.Create
-				.Please();
+				.PleaseAsync()
+				.Await();
 
 			var gb = countries.CountryItems.First(c => c.Code == "GB");
 			Assert.That(gb, Is.Not.Null);
@@ -93,7 +95,8 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.TerritoriesEn
 		{
 			var countries = Api<Countries>
 				.Create
-				.Please();
+				.PleaseAsync()
+				.Await();
 
 			var gb = countries.CountryItems.First(c => c.Code == "GB");
 
