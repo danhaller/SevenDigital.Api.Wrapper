@@ -16,8 +16,8 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.User.Payment
 
 			var response = new Response(HttpStatusCode.OK, ResponseXml);
 
-			var xmlSerializer = new ResponseDeserializer<DeleteCard>();
-			var result = xmlSerializer.Deserialize(response);
+			var xmlParser = new ResponseParser<DeleteCard>();
+			var result = xmlParser.Parse(response);
 
 			Assert.That(result, Is.Not.Null);
 		}

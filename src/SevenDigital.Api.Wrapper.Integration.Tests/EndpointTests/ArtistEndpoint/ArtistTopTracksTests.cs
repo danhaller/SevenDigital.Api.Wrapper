@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Schema.ArtistEndpoint;
 
@@ -15,8 +14,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 			ArtistTopTracks artist = new FluentApi<ArtistTopTracks>()
 				.WithParameter("artistId", "1")
 				.WithParameter("country", "GB")
-				.PleaseAsync()
-				.Await();
+				.Please();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
@@ -26,11 +24,10 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		public void Can_hit_endpoint_with_fluent_interface()
 		{
 			var artist = Api<ArtistTopTracks>
-				.Create
-				.WithArtistId(1)
-				.WithParameter("country", "GB")
-				.PleaseAsync()
-				.Await();
+								.Create
+								.WithArtistId(1)
+								.WithParameter("country", "GB")
+								.Please();
 			
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
@@ -39,25 +36,16 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		[Test]
 		public void Can_handle_pagingerror_with_paging()
 		{
-			ApiXmlException expectedError = null;
-			try
-			{
+			var ex = Assert.Throws<InputParameterException>(() =>
 				new FluentApi<ArtistTopTracks>()
 					.WithParameter("artistId", "1")
 					.WithParameter("page", "2")
 					.WithParameter("pageSize", "10")
-					.PleaseAsync()
-					.Await();
-			} 
-			catch(ApiXmlException ex)
-			{
-				expectedError = ex;
-			}
+					.Please());
 
-			Assert.That(expectedError, Is.Not.Null);
-			Assert.That(expectedError.Error, Is.Not.Null);
-			Assert.That(expectedError.Error.Code, Is.EqualTo(1003));
-			Assert.That(expectedError.Error.ErrorMessage, Is.EqualTo("Requested page out of range"));
+			Assert.That(ex.ResponseBody, Is.Not.Null);
+			Assert.That(ex.ErrorCode, Is.EqualTo(1003));
+			Assert.That(ex.Message, Is.EqualTo("Requested page out of range"));
 		}
 	}
 }

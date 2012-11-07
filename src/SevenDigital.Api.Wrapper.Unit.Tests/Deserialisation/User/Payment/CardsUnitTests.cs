@@ -9,7 +9,7 @@ using SevenDigital.Api.Wrapper.Serialization;
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.User.Payment
 {
 	[TestFixture]
-	public class CardsUnitTests
+	public class Cards_unit_tests
 	{
 		private const string ResponseXml = 
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
@@ -29,11 +29,11 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.User.Payment
 		private readonly Response _response = new Response(HttpStatusCode.OK, ResponseXml);
 
 		[Test]
-		public void can_deserialise_response_user_cards()
+		public void Can_deserialise_response_user_cards()
 		{
-			var xmlSerializer = new ResponseDeserializer<Cards>();
+			var xmlParser = new ResponseParser<Cards>();
 
-			var deserializedCards = xmlSerializer.Deserialize(this._response);
+			var deserializedCards = xmlParser.Parse(_response);
 
 			var firstCard = deserializedCards.UserCards[0];
 			Assert.That(deserializedCards.UserCards.Count(), Is.EqualTo(1));

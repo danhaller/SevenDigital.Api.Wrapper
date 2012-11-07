@@ -49,7 +49,6 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 				.GetDataAsync(endPointState)
 				.Await();
 
-
 			_httpClient.GetAsyncOnUrlMustHaveHappened(expected);
 		}
 

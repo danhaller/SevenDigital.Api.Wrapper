@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SevenDigital.Api.Schema;
 using SevenDigital.Api.Wrapper.Serialization;
+using SevenDigital.Api.Wrapper.Utility.Serialization;
 
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 {
@@ -12,7 +13,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 		const string EmptyXmlResponse = "<?xml version=\"1.0\"?><response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" status=\"ok\" version=\"1.2\"></response>";
 
 		[Test]
-		public void should_deserialize_well_formed_xml()
+		public void Should_deserialize_well_formed_xml()
 		{
 			var deserializer = new StringDeserializer<TestObject>();
 
@@ -30,7 +31,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 		}
 
 		[Test]
-		public void should_deserialize_Empty_xml_to_empty_object()
+		public void Should_deserialize_empty_xml_to_empty_object()
 		{
 			var deserializer = new StringDeserializer<TestEmptyObject>();
 
@@ -40,7 +41,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 		}
 
 		[Test]
-		public void should_throw_exception_when_deserialize_into_wrong_type()
+		public void Should_throw_exception_when_deserialize_into_wrong_type()
 		{
 			var deserializer = new StringDeserializer<Status>();
 

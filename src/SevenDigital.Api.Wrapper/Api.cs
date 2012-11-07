@@ -11,6 +11,11 @@ namespace SevenDigital.Api.Wrapper
 				return new FluentApi<T>();
 			}
 		}
+
+		public static IFluentApi<T> CreateWithCreds(IOAuthCredentials oAuthCredentials, IApiUri apiUri)
+		{
+			return new FluentApi<T>(oAuthCredentials, apiUri); 
+		}
 	}
 
 	public static class Api 

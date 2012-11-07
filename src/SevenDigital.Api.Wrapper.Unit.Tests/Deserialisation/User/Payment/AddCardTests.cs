@@ -21,14 +21,14 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Deserialisation.User.Payment
 				"</card>" +
 				"</response>";
 
-		private readonly Response _response = new Response( HttpStatusCode.OK, ResponseXml);
+		private readonly Response _response = new Response(HttpStatusCode.OK, ResponseXml);
 
 		[Test]
 		public void can_deserialise_response_user_cards()
 		{
-			var xmlSerializer = new ResponseDeserializer<AddCard>();
+			var xmlParser = new ResponseParser<AddCard>();
 
-			var deserializedCards = xmlSerializer.Deserialize(this._response);
+			var deserializedCards = xmlParser.Parse(_response);
 			
 			Assert.That(deserializedCards, Is.Not.Null);
 		}

@@ -6,11 +6,11 @@ using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Schema.ArtistEndpoint;
 using SevenDigital.Api.Schema.LockerEndpoint;
 
-namespace SevenDigital.Api.Wrapper.ExampleUsage 
+namespace SevenDigital.Api.Wrapper.ExampleUsage
 {
-	class Program 
+	class Program
 	{
-		static void Main(string[] args) 
+		static void Main(string[] args)
 		{
 			string s = args[0];
 			int artistId = Convert.ToInt32(s);
@@ -95,9 +95,9 @@ namespace SevenDigital.Api.Wrapper.ExampleUsage
 				Console.WriteLine("Trying artist/details without artistId parameter...");
 				await Api<Artist>.Create.PleaseAsync();
 			}
-			catch (ApiXmlException ex)
+			catch (ApiException ex)
 			{
-				Console.WriteLine("{0} : {1}", ex.Error.Code, ex.Error.ErrorMessage);
+				Console.WriteLine("{0} : {1}", ex, ex.Message);
 			}
 
 			try
@@ -106,9 +106,9 @@ namespace SevenDigital.Api.Wrapper.ExampleUsage
 				Console.WriteLine("Trying user/locker without any credentials...");
 				await Api<Locker>.Create.PleaseAsync();
 			}
-			catch (ApiXmlException ex)
+			catch (ApiException ex)
 			{
-				Console.WriteLine("{0} : {1}", ex.Error.Code, ex.Error.ErrorMessage);
+				Console.WriteLine("{0} : {1}", ex, ex.Message);
 			}
 		}
 	}

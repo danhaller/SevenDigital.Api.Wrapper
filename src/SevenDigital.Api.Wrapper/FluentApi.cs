@@ -16,13 +16,13 @@ namespace SevenDigital.Api.Wrapper
 	{
 		private readonly RequestData _requestData = new RequestData();
 		private readonly IRequestCoordinator _requestCoordinator;
-		private readonly IResponseDeserializer<T> _deserializer;
+		private readonly IResponseParser<T> _parser;
 
 		public FluentApi(IRequestCoordinator requestCoordinator)
 		{
 			_requestCoordinator = requestCoordinator;
 
-			_deserializer = new ResponseDeserializer<T>();
+			_parser = new ResponseParser<T>();
 
 			ApiEndpointAttribute attribute = typeof(T).GetCustomAttributes(true)
 				.OfType<ApiEndpointAttribute>()
@@ -121,9 +121,8 @@ namespace SevenDigital.Api.Wrapper
 		public virtual async Task<T> PleaseAsync()
 		{
 			var response = await _requestCoordinator.GetDataAsync(_requestData);
-			return _deserializer.Deserialize(response);
+			return _parser.Parse(response);
 		}
-
 
 		public IDictionary<string, string> Parameters { get { return _requestData.Parameters; } }
 	}
