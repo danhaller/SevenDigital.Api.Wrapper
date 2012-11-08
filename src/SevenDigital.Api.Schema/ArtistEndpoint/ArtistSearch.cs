@@ -9,7 +9,6 @@ namespace SevenDigital.Api.Schema.ArtistEndpoint
 	[XmlRoot("searchResults")]
 	public class ArtistSearch : HasPaging, HasSearchParameter
 	{
-
 		public ArtistSearch()
 		{
 			Results = new List<ArtistSearchResult>();
