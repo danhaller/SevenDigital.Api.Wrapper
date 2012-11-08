@@ -103,7 +103,7 @@ namespace SevenDigital.Api.Wrapper
 		public virtual IFluentApi<T> ForUser(string token, string secret)
 		{
 			_requestData.UserToken = token;
-			_requestData.UserSecret = secret;
+			_requestData.TokenSecret = secret;
 			return this;
 		}
 

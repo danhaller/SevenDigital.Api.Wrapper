@@ -19,7 +19,7 @@ namespace SevenDigital.Api.Wrapper.Http
 
 		public string UserToken { get; set; }
 
-		public string UserSecret { get; set; }
+		public string TokenSecret { get; set; }
 
 		public bool IsSigned { get; set; }
 

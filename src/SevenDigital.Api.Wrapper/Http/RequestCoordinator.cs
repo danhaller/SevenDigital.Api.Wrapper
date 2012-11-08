@@ -64,7 +64,7 @@ namespace SevenDigital.Api.Wrapper.Http
 		{
 			if (requestData.IsSigned)
 			{
-				return _urlSigner.SignGetUrl(uri, requestData.UserToken, requestData.UserSecret, _oAuthCredentials);
+				return _urlSigner.SignGetUrl(uri, requestData.UserToken, requestData.TokenSecret, _oAuthCredentials);
 			}
 			return uri;
 		}
@@ -73,7 +73,7 @@ namespace SevenDigital.Api.Wrapper.Http
 		{
 			if (requestData.IsSigned)
 			{
-				return _urlSigner.SignPostRequest(uri, requestData.UserToken, requestData.UserSecret, _oAuthCredentials, requestData.Parameters);
+				return _urlSigner.SignPostRequest(uri, requestData.UserToken, requestData.TokenSecret, _oAuthCredentials, requestData.Parameters);
 			}
 			return requestData.Parameters;
 		}
