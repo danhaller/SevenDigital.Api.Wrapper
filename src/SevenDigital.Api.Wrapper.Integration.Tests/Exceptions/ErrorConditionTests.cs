@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using SevenDigital.Api.Schema;
 using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Schema.ArtistEndpoint;
 using SevenDigital.Api.Schema.LockerEndpoint;
@@ -17,7 +18,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.Exceptions
 			var apiXmlException = Assert.Throws<InputParameterException>(
 				() => Api<Artist>.Create.PleaseAsync().Await());
 
-			Assert.That(apiXmlException.ErrorCode, Is.EqualTo(1001));
+			Assert.That(apiXmlException.ErrorCode, Is.EqualTo(ErrorCode.RequiredParameterMissing));
 			Assert.That(apiXmlException.Message, Is.EqualTo("Missing parameter artistId."));
 		}
 

@@ -38,12 +38,12 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 			var expectedHeaders = new Dictionary<string, string>();
 			var expected = string.Format("{0}/test?oauth_consumer_key={1}", ApiUrl, _consumerKey);
 
-			var endPointState = new RequestData 
-				{ 
-					UriPath = "test", 
-					HttpMethod = expectedMethod, 
-					Headers = expectedHeaders 
-				};
+			var endPointState = new RequestData
+			{
+				UriPath = "test",
+				HttpMethod = expectedMethod,
+				Headers = expectedHeaders
+			};
 
 			_requestCoordinator
 				.GetDataAsync(endPointState)
@@ -63,13 +63,13 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 			var testParameters = new Dictionary<string, string> { { "q", UnEncodedParameterValue } };
 			var expected = string.Format("{0}/test?oauth_consumer_key={1}&q={2}", ApiUrl, _consumerKey, ExpectedParameterValue);
 
-			var endPointState = new RequestData 
-				{ 
-					UriPath = "test", 
-					HttpMethod = HttpMethod.Get, 
-					Headers = expectedHeaders, 
-					Parameters = testParameters 
-				};
+			var endPointState = new RequestData
+			{
+				UriPath = "test",
+				HttpMethod = HttpMethod.Get,
+				Headers = expectedHeaders,
+				Parameters = testParameters
+			};
 
 			_requestCoordinator.GetDataAsync(endPointState);
 
@@ -80,11 +80,11 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		public void Should_not_care_how_many_times_you_create_an_endpoint()
 		{
 			var endPointState = new RequestData
-				{
-					UriPath = "{slug}", 
-					HttpMethod = HttpMethod.Get, 
-					Parameters = new Dictionary<string, string> { { "slug", "something" } }
-				};
+			{
+				UriPath = "{slug}",
+				HttpMethod = HttpMethod.Get,
+				Parameters = new Dictionary<string, string> { { "slug", "something" } }
+			};
 			var result = _requestCoordinator.EndpointUrl(endPointState);
 
 			Assert.That(result, Is.EqualTo(_requestCoordinator.EndpointUrl(endPointState)));
@@ -110,7 +110,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		{
 			var fakeClient = new FakeHttpClientWrapper(new Response(HttpStatusCode.OK, ServiceStatus));
 
-			var endpointResolver = new RequestCoordinator(fakeClient, _urlSigner, 
+			var endpointResolver = new RequestCoordinator(fakeClient, _urlSigner,
 				EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance);
 
 			var responseData = endpointResolver
@@ -141,11 +141,11 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 			var endpointResolver = new RequestCoordinator(_httpClient, _urlSigner, oAuthCredentials, apiUri);
 
 			var endPointState = new RequestData
-				{
-					UriPath = "test", 
-					HttpMethod = HttpMethod.Get, 
-					Headers = new Dictionary<string, string>()
-				};
+			{
+				UriPath = "test",
+				HttpMethod = HttpMethod.Get,
+				Headers = new Dictionary<string, string>()
+			};
 
 			endpointResolver.GetDataAsync(endPointState);
 
@@ -169,18 +169,18 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		{
 			const string UriPath = "something";
 			var request = new RequestData
-				{
-					UriPath = UriPath,
-					HttpMethod = HttpMethod.Post
-				};
+			{
+				UriPath = UriPath,
+				HttpMethod = HttpMethod.Post
+			};
 			var result = _requestCoordinator.EndpointUrl(request);
 
-			Assert.That(result, Is.EqualTo(ApiUrl + "/" + UriPath ));
+			Assert.That(result, Is.EqualTo(ApiUrl + "/" + UriPath));
 		}
 
 		private void Given_a_urlresolver_that_returns_valid_xml()
 		{
-			_httpClient.MockGetAsync(new Response( HttpStatusCode.OK, ServiceStatus));
+			_httpClient.MockGetAsync(new Response(HttpStatusCode.OK, ServiceStatus));
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SevenDigital.Api.Wrapper.Serialization;
-using SevenDigital.Api.Wrapper.Utility.Serialization;
 
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 {
@@ -91,8 +90,6 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 
 			Assert.That(result, Is.False);
 		}
-
-
 
 		[Test]
 		public void Should_detect_500_as_server_error()
