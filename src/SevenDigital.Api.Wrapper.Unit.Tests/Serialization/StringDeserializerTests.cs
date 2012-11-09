@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SevenDigital.Api.Schema;
 using SevenDigital.Api.Wrapper.Serialization;
-using SevenDigital.Api.Wrapper.Utility.Serialization;
 
 namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 {

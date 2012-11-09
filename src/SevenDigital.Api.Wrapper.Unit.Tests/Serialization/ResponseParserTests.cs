@@ -4,9 +4,8 @@ using NUnit.Framework;
 using SevenDigital.Api.Wrapper.Exceptions;
 using SevenDigital.Api.Wrapper.Http;
 using SevenDigital.Api.Wrapper.Serialization;
-using SevenDigital.Api.Wrapper.Unit.Tests.Serialization;
 
-namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
+namespace SevenDigital.Api.Wrapper.Unit.Tests.Serialization
 {
 	[TestFixture]
 	public class ResponseParserTests
@@ -137,7 +136,6 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Utility.Serialization
 		{
 			const string badError = "<?xml version=\"1.0\" encoding=\"utf-8\" ?><response status=\"error\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://api.7digital.com/1.2/static/7digitalAPI.xsd\" ><error><errorme></errorme></error></response>";
 			var response = new Response(HttpStatusCode.OK, badError);
-
 
 			var xmlParser = new ResponseParser<TestObject>();
 

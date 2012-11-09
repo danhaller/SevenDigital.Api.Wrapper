@@ -34,13 +34,13 @@ namespace SevenDigital.Api.Wrapper.Serialization
 				throw new ArgumentNullException("response");
 
 			if (string.IsNullOrEmpty(response.Body))
-				throw ExceptionFactory.CreateNonXmlResponseException(response);
+				throw new NonXmlResponseException(response);
 
 			if (!_apiResponseDetector.IsXml(response.Body))
 				DetectAndThrowForNonXmlResponses(response);
 
 			if (!_apiResponseDetector.IsApiOkResponse(response.Body) && !_apiResponseDetector.IsApiErrorResponse(response.Body))
-				throw ExceptionFactory.CreateUnrecognisedStatusException(response);
+				throw new UnrecognisedStatusException(response);
 
 			if (_apiResponseDetector.IsApiOkResponse(response.Body) && !_apiResponseDetector.IsApiErrorResponse(response.Body))
 				return;
@@ -52,9 +52,9 @@ namespace SevenDigital.Api.Wrapper.Serialization
 		private void DetectAndThrowForNonXmlResponses(Response response)
 		{
 			if (_apiResponseDetector.IsOAuthError(response.Body))
-				throw ExceptionFactory.CreateOAuthException(response);
+				throw new OAuthException(response);
 
-			throw ExceptionFactory.CreateNonXmlResponseException(response);
+			throw new NonXmlResponseException(response);
 		}
 
 		private Error ParseError(Response response)
@@ -75,7 +75,7 @@ namespace SevenDigital.Api.Wrapper.Serialization
 			}
 			catch(Exception ex)
 			{
-				throw ExceptionFactory.CreateUnrecognisedErrorException(response, ex);
+				throw new UnrecognisedErrorException(ex, response);
 			}
 		}
 
@@ -94,10 +94,7 @@ namespace SevenDigital.Api.Wrapper.Serialization
 			}
 			catch (Exception ex)
 			{
-				var nonXmlResponseException = new NonXmlResponseException(NonXmlResponseException.DEFAULT_ERROR_MESSAGE, ex);
-				nonXmlResponseException.ResponseBody = response.Body;
-				nonXmlResponseException.StatusCode = response.StatusCode;
-				throw nonXmlResponseException;
+				throw new NonXmlResponseException(NonXmlResponseException.DEFAULT_ERROR_MESSAGE, ex, response);
 			}
 		}
 	}
