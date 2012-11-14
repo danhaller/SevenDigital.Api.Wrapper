@@ -8,12 +8,11 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests
 	public class StatusTests
 	{
 		[Test]
-		public void Can_hit_endpoint()
+		public async void Can_hit_endpoint()
 		{
-			Status status = Api<Status>
+			Status status = await Api<Status>
 				.Create
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
 			Assert.That(status, Is.Not.Null);
 			Assert.That(status.ServerTime.Day, Is.EqualTo(DateTime.Now.Day));

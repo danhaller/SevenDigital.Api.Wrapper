@@ -5,7 +5,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests
 {
 	public static class TaskHelpers
 	{
-		public static T Await<T>(this Task<T> task)
+		public static T BusyAwait<T>(this Task<T> task)
 		{
 			try
 			{
@@ -16,7 +16,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests
 			{
 				if (aggreggateEx.InnerExceptions.Count == 1)
 				{
-					throw aggreggateEx.InnerExceptions[0]; 
+					throw aggreggateEx.InnerExceptions[0];
 				}
 
 				throw;

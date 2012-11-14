@@ -9,14 +9,13 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.OAuth
 	public class OAuthRequestTokenTest
 	{
 		[Test]
-		public void Should_not_throw_unauthorised_exception_if_correct_creds_passed() 
+		public async void Should_not_throw_unauthorised_exception_if_correct_creds_passed() 
 		{
 			try 
 			{
-				OAuthRequestToken oAuthRequestToken = Api<OAuthRequestToken>
+				OAuthRequestToken oAuthRequestToken = await Api<OAuthRequestToken>
 					.Create
-					.PleaseAsync()
-					.Await();
+					.PleaseAsync();
 
 				Assert.That(oAuthRequestToken.Secret, Is.Not.Empty);
 				Assert.That(oAuthRequestToken.Token, Is.Not.Empty);

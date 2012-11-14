@@ -8,52 +8,48 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 	public class ArtistSearchTests
 	{
 		[Test]
-		public void Can_hit_endpoint()
+		public async void Can_hit_endpoint()
 		{
-			ArtistSearch artist = new FluentApi<ArtistSearch>()
+			ArtistSearch artist = await new FluentApi<ArtistSearch>()
 				.WithParameter("q", "pink")
 				.WithParameter("country", "GB")
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 		}
 
 		[Test]
-		public void Can_do_similar_to_browse()
+		public async void Can_do_similar_to_browse()
 		{
-			var artist = Api<ArtistSearch>
+			var artist = await Api<ArtistSearch>
 				.Create
 				.WithQuery("radiohe")
 				.WithParameter("sort","popularity+desc")
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
-			Assert.That(artist, Is.Not.Null);		
+			Assert.That(artist, Is.Not.Null);
 		}
 
 		[Test]
-		public void Can_hit_endpoint_with_fluent_interface()
+		public async void Can_hit_endpoint_with_fluent_interface()
 		{
-			ArtistSearch artistSearch = Api<ArtistSearch>
+			ArtistSearch artistSearch = await Api<ArtistSearch>
 				.Create
 				.WithQuery("pink")
 				.WithParameter("country", "GB")
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
 			Assert.That(artistSearch, Is.Not.Null);
 		}
 
 		[Test]
-		public void Can_hit_endpoint_with_paging()
+		public async void Can_hit_endpoint_with_paging()
 		{
-			ArtistSearch artistBrowse = Api<ArtistSearch>.Create
+			ArtistSearch artistBrowse = await Api<ArtistSearch>.Create
 				.WithParameter("q", "pink")
 				.WithParameter("page", "2")
 				.WithParameter("pageSize", "20")
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
 			Assert.That(artistBrowse, Is.Not.Null);
 			Assert.That(artistBrowse.Page, Is.EqualTo(2));
@@ -61,28 +57,27 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 		}
 
 		[Test]
-		public void Can_get_multiple_results()
+		public async void Can_get_multiple_results()
 		{
-			ArtistSearch artistSearch = Api<ArtistSearch>.Create
+			ArtistSearch artistSearch = await Api<ArtistSearch>.Create
 				.WithParameter("q", "pink")
 				.WithParameter("page", "1")
 				.WithParameter("pageSize", "20")
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
 			Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
 		}
 
 		[Test]
-		public void Can_get_multiple_results_with_new_FluentApi_overload()
+		public async void Can_get_multiple_results_with_new_Fluent_api_overload()
 		{
-			var artistSearch = new FluentApi<ArtistSearch>(new AppSettingsCredentials(), new ApiUri())
+			var api = new FluentApi<ArtistSearch>(new AppSettingsCredentials(), new ApiUri());
+			var artistSearch = await api
 				.ForShop(34)
 				.WithQuery("pink")
 				.WithPageNumber(1)
 				.WithPageSize(20)
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
 			Assert.That(artistSearch.Results.Count, Is.GreaterThan(1));
 		}

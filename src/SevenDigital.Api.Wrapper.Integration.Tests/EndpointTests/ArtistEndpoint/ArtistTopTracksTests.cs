@@ -10,27 +10,25 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 	public class ArtistTopTracksTests
 	{
 		[Test]
-		public void Can_hit_endpoint()
+		public async void Can_hit_endpoint()
 		{
-			ArtistTopTracks artist = new FluentApi<ArtistTopTracks>()
+			ArtistTopTracks artist = await new FluentApi<ArtistTopTracks>()
 				.WithParameter("artistId", "1")
 				.WithParameter("country", "GB")
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
 		}
 
 		[Test]
-		public void Can_hit_endpoint_with_fluent_interface()
+		public async void Can_hit_endpoint_with_fluent_interface()
 		{
-			var artist = Api<ArtistTopTracks>
+			var artist = await Api<ArtistTopTracks>
 				.Create
 				.WithArtistId(1)
 				.WithParameter("country", "GB")
-				.PleaseAsync()
-				.Await();
+				.PleaseAsync();
 			
 			Assert.That(artist, Is.Not.Null);
 			Assert.That(artist.Tracks.Count, Is.GreaterThan(0));
@@ -45,7 +43,7 @@ namespace SevenDigital.Api.Wrapper.Integration.Tests.EndpointTests.ArtistEndpoin
 					.WithParameter("page", "2")
 					.WithParameter("pageSize", "10")
 					.PleaseAsync()
-					.Await());
+					.BusyAwait());
 
 			Assert.That(ex.ResponseBody, Is.Not.Null);
 			Assert.That(ex.ErrorCode, Is.EqualTo(ErrorCode.ParameterOutOfAllowableRange));
