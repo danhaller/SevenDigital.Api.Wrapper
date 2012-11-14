@@ -72,13 +72,12 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests
 		}
 
 		[Test]
-		public void should_put_payload_in_action_result()
+		public async void should_put_payload_in_action_result()
 		{
 			var requestCoordinator = new FakeRequestCoordinator(this._stubResponse);
 
-			var status = new FluentApi<Status>(requestCoordinator)
-				.PleaseAsync()
-				.Await();
+			var status = await new FluentApi<Status>(requestCoordinator)
+				.PleaseAsync();
 
 			Assert.That(status, Is.Not.Null);
 		}

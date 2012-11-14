@@ -76,7 +76,6 @@
     <Compile Include="ReleaseEndpoint\ReleaseEndpointTests.cs" />
     <Compile Include="Serialization\StringDeserializerTests.cs" />
     <Compile Include="Serialization\TestObject.cs" />
-    <Compile Include="TaskHelpers.cs" />
     <Compile Include="Serialization\ApiResponseDetectorTests.cs" />
     <Compile Include="Serialization\ResponseParserTests.cs" />
   </ItemGroup>
