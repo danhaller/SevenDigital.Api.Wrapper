@@ -7,13 +7,13 @@ using SevenDigital.Api.Wrapper.AttributeManagement;
 namespace SevenDigital.Api.Wrapper.Unit.Tests.AttributeManagement
 {
 	[TestFixture]
-	public class AttributeValidationTests
+	public class AttributeRequestDataBuilderTests
 	{
 		[Test]
 		public void Sets_correct_uri_based_on_apiEndpoint()
 		{
-			var attributeValidation = new AttributeValidation<StubEndpoint>();
-			var requestData = attributeValidation.Validate();
+			var attributeValidation = new AttributeRequestDataBuilder<StubEndpoint>();
+			var requestData = attributeValidation.BuildRequestData();
 
 			Assert.That(requestData.UriPath, Is.EqualTo("me/endpoint"));
 		}
@@ -21,8 +21,8 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.AttributeManagement
 		[Test]
 		public void Sets_IsSigned_if_OAuthSigned_specified()
 		{
-			var attributeValidation = new AttributeValidation<StubSecureEndpoint>();
-			var requestData = attributeValidation.Validate();
+			var attributeValidation = new AttributeRequestDataBuilder<StubSecureEndpoint>();
+			var requestData = attributeValidation.BuildRequestData();
 
 			Assert.That(requestData.IsSigned);
 		}
@@ -30,8 +30,8 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.AttributeManagement
 		[Test]
 		public void Sets_IsSigned_false_if_OAuthSigned_not_specified()
 		{
-			var attributeValidation = new AttributeValidation<StubEndpoint>();
-			var requestData = attributeValidation.Validate();
+			var attributeValidation = new AttributeRequestDataBuilder<StubEndpoint>();
+			var requestData = attributeValidation.BuildRequestData();
 
 			Assert.That(requestData.IsSigned, Is.False);
 		}
@@ -39,8 +39,8 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.AttributeManagement
 		[Test]
 		public void Sets_UseHttps_if_RequireSecure_specified()
 		{
-			var attributeValidation = new AttributeValidation<StubSecureEndpoint>();
-			var requestData = attributeValidation.Validate();
+			var attributeValidation = new AttributeRequestDataBuilder<StubSecureEndpoint>();
+			var requestData = attributeValidation.BuildRequestData();
 
 			Assert.That(requestData.UseHttps);
 		}
@@ -48,31 +48,30 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.AttributeManagement
 		[Test]
 		public void Sets_UseHttps_false_if_RequireSecure_not_specified()
 		{
-			var attributeValidation = new AttributeValidation<StubEndpoint>();
-			var requestData = attributeValidation.Validate();
+			var attributeValidation = new AttributeRequestDataBuilder<StubEndpoint>();
+			var requestData = attributeValidation.BuildRequestData();
 
 			Assert.That(requestData.UseHttps, Is.False);
 		}
 
 		[Test]
-		public void Sets_Httpethod_to_POST_if_HttpPost_specified()
+		public void Sets_HttpMethod_to_POST_if_HttpPost_specified()
 		{
-			var attributeValidation = new AttributeValidation<StubPostEndpoint>();
-			var requestData = attributeValidation.Validate();
+			var attributeValidation = new AttributeRequestDataBuilder<StubPostEndpoint>();
+			var requestData = attributeValidation.BuildRequestData();
 
 			Assert.That(requestData.HttpMethod, Is.EqualTo(HttpMethod.Post));
 		}
 
 		[Test]
-		public void Httpethod_tdefaults_to_GET_if_HttpPost_not_specified()
+		public void HttpMethod_defaults_to_GET_if_HttpPost_not_specified()
 		{
-			var attributeValidation = new AttributeValidation<StubEndpoint>();
-			var requestData = attributeValidation.Validate();
+			var attributeValidation = new AttributeRequestDataBuilder<StubEndpoint>();
+			var requestData = attributeValidation.BuildRequestData();
 
 			Assert.That(requestData.HttpMethod, Is.EqualTo(HttpMethod.Get));
 		}
 	}
-
 
 	[ApiEndpoint("me/secure/endpoint")]
 	[OAuthSigned]
