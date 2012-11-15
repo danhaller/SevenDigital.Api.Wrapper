@@ -88,6 +88,7 @@
     <Compile Include="Http\RequestCoordinator.cs" />
     <Compile Include="Http\RequestData.cs" />
     <Compile Include="Http\Response.cs" />
+    <Compile Include="IApiEndpoint.cs" />
     <Compile Include="IApiUri.cs" />
     <Compile Include="IOAuthCredentials.cs" />
     <Compile Include="EndpointResolution\OAuth\IUrlSigner.cs" />
