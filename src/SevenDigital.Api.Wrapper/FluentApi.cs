@@ -31,12 +31,6 @@ namespace SevenDigital.Api.Wrapper
 		public FluentApi()
 			: this(new RequestCoordinator(new HttpClientWrapper(), new UrlSigner(), EssentialDependencyCheck<IOAuthCredentials>.Instance, EssentialDependencyCheck<IApiUri>.Instance)) { }
 
-		public IFluentApi<T> WithEndpoint(string endpoint)
-		{
-			_requestData.UriPath = endpoint;
-			return this;
-		}
-
 		public IFluentApi<T> UsingClient(IHttpClientWrapper httpClient)
 		{
 			_requestCoordinator.HttpClient = httpClient;

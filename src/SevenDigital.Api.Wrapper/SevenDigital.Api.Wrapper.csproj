@@ -81,7 +81,6 @@
     <Compile Include="Extensions\HasUserDeliverItemParameterExtensions.cs" />
     <Compile Include="Extensions\LockerSortColumn.cs" />
     <Compile Include="Extensions\SortOrder.cs" />
-    <Compile Include="Http\GetRequest.cs" />
     <Compile Include="Http\HttpClientWrapper.cs" />
     <Compile Include="Http\HttpHelpers.cs" />
     <Compile Include="Http\IHttpClientWrapper.cs" />
