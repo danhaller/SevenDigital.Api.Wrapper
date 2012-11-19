@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Net.Http;
+using NUnit.Framework;
 using SevenDigital.Api.Schema.Attributes;
 using SevenDigital.Api.Schema.OAuth;
 using SevenDigital.Api.Wrapper.AttributeManagement;
@@ -59,7 +60,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.AttributeManagement
 			var attributeValidation = new AttributeValidation<StubPostEndpoint>();
 			var requestData = attributeValidation.Validate();
 
-			Assert.That(requestData.HttpMethod, Is.EqualTo("POST"));
+			Assert.That(requestData.HttpMethod, Is.EqualTo(HttpMethod.Post));
 		}
 
 		[Test]
@@ -68,7 +69,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.AttributeManagement
 			var attributeValidation = new AttributeValidation<StubEndpoint>();
 			var requestData = attributeValidation.Validate();
 
-			Assert.That(requestData.HttpMethod, Is.EqualTo("GET"));
+			Assert.That(requestData.HttpMethod, Is.EqualTo(HttpMethod.Get));
 		}
 	}
 

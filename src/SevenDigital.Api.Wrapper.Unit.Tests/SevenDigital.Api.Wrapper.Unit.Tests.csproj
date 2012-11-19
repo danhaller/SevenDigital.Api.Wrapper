@@ -69,6 +69,7 @@
     <Compile Include="FluentAPITests.cs" />
     <Compile Include="Http\DictionaryExtensionsTests.cs" />
     <Compile Include="Http\FakeHttpClientWrapper.cs" />
+    <Compile Include="Http\FakeRequestCoordinator.cs" />
     <Compile Include="Http\MockHelpers.cs" />
     <Compile Include="Http\NameValueExtensionsTests.cs" />
     <Compile Include="Http\RequestCoordinatorTests.cs" />
