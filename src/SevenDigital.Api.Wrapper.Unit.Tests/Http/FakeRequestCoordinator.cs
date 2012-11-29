@@ -15,7 +15,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 
 		public async Task<Response> GetDataAsync(RequestData requestData)
 		{
-			return await Task.Factory.StartNew(() => _fakeResponse);
+			return await Task.FromResult(_fakeResponse);
 		}
 
 		public string EndpointUrl(RequestData requestData)

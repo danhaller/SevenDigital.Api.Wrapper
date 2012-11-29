@@ -10,7 +10,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		public static void MockGetAsync(this IHttpClientWrapper httpClient, Response response)
 		{
 			A.CallTo(() => httpClient.GetAsync(A<IDictionary<string, string>>.Ignored, A<string>.Ignored))
-				.ReturnsLazily(() => Task.Factory.StartNew(() => response));
+				.ReturnsLazily(() => Task.FromResult(response));
 		}
 
 		public static void GetAsyncOnUrlMustHaveHappened(this IHttpClientWrapper httpClient, string expected)
@@ -39,7 +39,7 @@ namespace SevenDigital.Api.Wrapper.Unit.Tests.Http
 		public static void MockGetDataAsync(this IRequestCoordinator httpClient, Response response)
 		{
 			A.CallTo(() => httpClient.GetDataAsync(A<RequestData>.Ignored))
-				.ReturnsLazily(() => Task.Factory.StartNew(() => response));
+				.ReturnsLazily(() => Task.FromResult(response));
 		}
 
 	}
